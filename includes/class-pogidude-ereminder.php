@@ -8,7 +8,6 @@ add_filter('cron_schedules', array( 'Pogidude_Ereminder', 'add_cron_intervals' )
 
 //register our event
 add_action('pogidude_send_reminders', array('Pogidude_Ereminder', 'send_ereminders') );
-//add_action('pogidude_send_reminders', array('Pogidude_Ereminder', 'publish_ereminder') );
 
 Class Pogidude_Ereminder {
 	
@@ -27,7 +26,7 @@ Class Pogidude_Ereminder {
 		//verify event has not been scheduled
 		if( !wp_next_scheduled( 'pogidude_send_reminders' ) ){
 			//schedule our custom event
-			wp_schedule_event( time(), 'minute', 'pogidude_send_reminders' );
+			wp_schedule_event( time(), 'pogidude_5minutes', 'pogidude_send_reminders' );
 		}
 	}
 	
@@ -43,58 +42,24 @@ Class Pogidude_Ereminder {
 	}
 	
 	/**
-	 * Register 'ereminder' Custom Post Type
-	 */
-	public function register_ereminder_post_type(){
-		$labels = array(
-			'name' => __('E-Reminders'),
-			'singular_name' => __('E-Reminder'),
-			'add_new' => _x('Create New', 'entry'),
-			'add_new_item' => __('Create E-Reminder' ),
-			'edit_item' => __( 'Edit E-Reminder' ),
-			'new_item' => __( 'New E-Reminder' ),
-			'view_item' => __( 'View E-Reminder' ),
-			'search_items' => __( 'Search E-Reminders' ),
-			'not_found' => __('No E-Reminders found' ),
-			'not_found_in_trash' => __('No E-Reminders found in Trash' ),
-			'parent_item_colon' => ''
-		);
-		
-		$args = array(
-			'labels' => $labels,
-			'public' => false,
-			'show_in_nav_menus' => false,
-			'exclude_from_search' => true,
-			'show_ui' => true,
-			'show_in_menu' => true,
-			'publicly_queryable' => false,
-			'query_var' => true,
-			'rewrite' => true,
-			'capability_type' => 'post',
-			'hierarchical' => false,
-			'menu_position' => null,
-			'supports' => array(''),
-			'description' => 'Stores reminders'
-		);
-		
-		register_post_type( 'ereminder', $args );
-	}
-	
-	/**
 	 * Add our own Cron Intervals
 	 */
 	public function add_cron_intervals( $schedules ){
 		//create a 'minute' recurrent schedule option
-		$schedules['minute'] = array(
+		$schedules['pogidude_minute'] = array(
 			'interval' => 60,
 			'display' => 'Every Minute'
 		);
 		
-		$schedules['twicehourly'] = array(
+		$schedules['pogidude_twicehourly'] = array(
 			'interval' => 60*30,
 			'display' => 'Twice Hourly (30 min)'
 		);
 		
+		$schedules['pogidude_5minutes'] = array(
+			'interval' => 60*5,
+			'display' => 'Every 5 minutes'
+		);
 		return $schedules;
 	}
 	
@@ -132,10 +97,11 @@ Class Pogidude_Ereminder {
 			
 			
 			if( $email_result ){//wp_mail() processed the request successfully
-				//set post to 'publish'
+				//set post to 'publish' or delete the post
 				$args = array( 'ID' => $ereminder->ID, 'post_status' => 'publish', 'post_date' => $ereminder->post_date, 'post_date_gmt' => $ereminder->post_date_gmt, 'post_modified' => current_time('mysql',0), 'post_modified_gmt' => current_time('mysql',1) );
 				
-				wp_update_post( $args );
+				//wp_update_post( $args );
+				wp_delete_post( $ereminder->ID );
 			}
 			
 		}
@@ -166,23 +132,44 @@ Class Pogidude_Ereminder {
 		");
 		
 		return $ereminders;
-	}//get_ereminders_by_date
-
+	}//get_ereminders
 
 	/**
-	 * TEST: Publish one of our ereminders
+	 * Register 'ereminder' Custom Post Type
 	 */
-	public function publish_ereminder(){
-		global $wpdb;
+	public function register_ereminder_post_type(){
+		$labels = array(
+			'name' => __('E-Reminders'),
+			'singular_name' => __('E-Reminder'),
+			'add_new' => _x('Create New', 'entry'),
+			'add_new_item' => __('Create E-Reminder' ),
+			'edit_item' => __( 'Edit E-Reminder' ),
+			'new_item' => __( 'New E-Reminder' ),
+			'view_item' => __( 'View E-Reminder' ),
+			'search_items' => __( 'Search E-Reminders' ),
+			'not_found' => __('No E-Reminders found' ),
+			'not_found_in_trash' => __('No E-Reminders found in Trash' ),
+			'parent_item_colon' => ''
+		);
 		
-		$pd = new Pogidude_Ereminder;
-		$ereminders = $pd->get_ereminders();
+		$args = array(
+			'labels' => $labels,
+			'public' => false,
+			'show_in_nav_menus' => false,
+			'exclude_from_search' => true,
+			'show_ui' => true,
+			'show_in_menu' => true,
+			'publicly_queryable' => false,
+			'query_var' => true,
+			'rewrite' => true,
+			'capability_type' => 'post',
+			'hierarchical' => false,
+			'menu_position' => null,
+			'supports' => array(''),
+			'description' => 'Stores reminders'
+		);
 		
-		foreach( $ereminders as $ereminder ){
-			$reminder_args = array( 'ID' => $ereminder->ID, 'post_status' => 'publish', 'post_date' => $ereminder->post_date, 'post_date_gmt' => $ereminder->post_date_gmt );
-			
-			wp_update_post( $reminder_args );
-		}
+		register_post_type( 'ereminder', $args );
 	}
 	
 } //Pogidude_Email_Reminder

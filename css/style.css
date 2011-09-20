@@ -1,8 +1,10 @@
 
 /** wrap **/
 .ereminder{}
+	.ereminder .page-title{ margin-bottom: 20px; }
+	.ereminder .message{ padding: 5px 10px; max-width: 714px; }
 
-.ereminder form{ background: #fafafa; border: 1px solid #ffffff;  font-family: Helvetica,Arial,sans-serif; max-width: 680px; padding: 18px 27px; }
+.ereminder form{ background: #fafafa; border: 1px solid #ffffff;  font-family: Helvetica,Arial,sans-serif; max-width: 680px; padding: 18px 27px; margin-bottom: 25px; }
 	.ereminder form p.field{ font-size: 24px; margin-top: 0; }
 		.ereminder p.field label{ color: #354757; font-size: 20px; font-weight: bold; }
 		.ereminder form p.field input{ border: 1px solid #ddd; color: #aaa; font-size: inherit; padding: 10px 15px; font-style: italic; }
@@ -13,8 +15,22 @@
 .ereminder .regular{ font-size: 13px; }
 
 /* Cutting Edge Stuff */
-.ereminder form{ background: -webkit-gradient(linear, left top, left bottom, from(#fafafa), to(#f3f3f3)); background: -moz-linear-gradient( top, #fcfcfc, #f3f3f3 ); background-color: #fafafa; box-shadow: 0 0 5px #c7c7c7; }
+.ereminder form{ 
+	background-image: linear-gradient(top, #FAFAFA, #F3F3F3);
+	background-image: -o-linear-gradient(top, #FAFAFA, #F3F3F3);
+	background-image: -moz-linear-gradient(top, #FAFAFA, #F3F3F3);
+	background-image: -webkit-linear-gradient(top, #FAFAFA, #F3F3F3);
+	background-image: -ms-linear-gradient(top, #FAFAFA, #F3F3F3);
+	background-image: -webkit-gradient( linear,	left top, left bottom, from(#FAFAFA), to(#F3F3F3) );
+	box-shadow: 0 0 5px #c7c7c7; 
+}
 /* IE Only */
 .ereminder form{ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fafafa', endColorstr='#f3f3f3'); }
-	.ereminder form p.field input{  background: -moz-linear-gradient( top, #f7f7f7, #fff ); box-shadow: 1px 1px 2px #e3e3e3; border-radius: 0px; }
-	.ereminder form p.field input:focus{ background: -moz-linear-gradient( top, #fafafa, #fff ); box-shadow: 1px 1px 3px #ddd; }
+	.ereminder form p.field input{  background: -moz-linear-gradient( top, #f7f7f7, #fff ); box-shadow: 0 0 3px #e1e1e1; border-radius: 0px; }
+	.ereminder form p.field input:focus{ background: -moz-linear-gradient( top, #fafafa, #fff ); box-shadow: 0 0 3px #ddd; }
+	
+.ereminder table.widefat{ max-width: 900px; }
+	.ereminder table .content{ min-width: 150px; }
+	.ereminder table .email{ width: 200px; }
+	.ereminder table .date{ width: 320px; }
+	.ereminder table .status{ width: 80px; }

@@ -30,13 +30,15 @@ function pogidude_ereminder_page(){
 		$email = '';
 		$time = date( 'h:00 a', $timenow + 60*60 );
 		$date = date( 'Y-m-d', $timenow );
+		$message = '';
 		
 	} else {
 	//if( !empty( $_POST ) && $_POST['checker'] === 'submit' ){
 	
 		//validate and sanitize content
 		if( '' == $_POST['pd-reminder-content'] ){
-			$error['content'] = 'Please enter a reminder';
+			$error['content'] = 'Please enter a reminder.';
+			$content = '';
 		} else {
 			$content = esc_attr( $_POST['pd-reminder-content'] );
 		}
@@ -50,7 +52,7 @@ function pogidude_ereminder_page(){
 		
 		//validate email
 		if( '' == $_POST['pd-reminder-email'] || !is_email( $_POST['pd-reminder-email'] ) ){
-			$error['email'] = 'Please enter a valid e-mail address';
+			$error['email'] = 'Please enter a valid e-mail address.';
 			$email = '';
 		} else {
 			$email = $_POST['pd-reminder-email'];
@@ -78,28 +80,41 @@ function pogidude_ereminder_page(){
 			'post_status' => 'draft'
 		);
 		
-		//create new post
-		$result = wp_insert_post( $reminder );
-		
-		?>
-		<?php if( empty( $result ) ): ?>
-			<div id="message" class="error">Error</div>
-		<?php else: ?>
-			<div id="message" class="updated">Reminder Created</div>
-			<?php //clear values
+		if( empty( $error ) ){
+			//create new post
+			$insert_post_success = wp_insert_post( $reminder );
+			
+			if( empty( $insert_post_success ) ){
+				$message = '<div class="error message">There was an error scheduling your reminder.</div>' . "\n";
+			} else {
+				$message = '<div class="updated message">Reminder created successfully!</div>' . "\n";
+				//set to default
 				$content = '';
 				$email = '';
-			?>
-		<?php endif; ?>
-		<?php
+				$time = date( 'h:00 a', $timenow + 60*60 );
+				$date = date( 'Y-m-d', $timenow );
+			}
+			
+		} else {
+			$message = '<div class="message error">' . "\n";
+			foreach( $error as $eid => $e ){
+				$message .= $e . "<br />\n";
+			}
+			$message .= '</div>' . "\n";
+		}
+		
 	}
 	
 	?>
 	
 	<div class="wrap ereminder">
 		<?php screen_icon('edit-comments'); ?>
-		<h2>Create Email Reminder</h2>
-		<p></p>
+		<h2 class="page-title">Create Email Reminder</h2>
+		
+		<?php if( !empty( $message ) ) :
+			echo $message;
+		endif; ?>
+		
 		<form method="POST" action="">
 			<p class="field">
 				<label for="pd-reminder-content">Enter your reminder</label><br />
@@ -121,11 +136,11 @@ function pogidude_ereminder_page(){
 		</form>
 		
 		<div class="reminder-list">
-			<h3>E-Reminders</h3>
+			<h3>Scheduled Reminders</h3>
 			<?php
 				global $wpdb;
 				
-				$current_time = current_time('mysql');
+				$current_time = current_time('mysql') + 60;
 				
 				$ereminder_array = $wpdb->get_results("
 								SELECT *
@@ -133,47 +148,40 @@ function pogidude_ereminder_page(){
 								WHERE post_date <= '{$current_time}'
 									AND post_type = 'ereminder'
 									
-								ORDER BY post_date DESC
+								ORDER BY post_date ASC
 								");
-				
-				
-				//$pd = new Pogidude_Ereminder;
-				//$ereminder_array = $pd->get_ereminders();
-				
-			//$ereminder_array = get_posts( $post_args );
-			//	var_dump( $ereminder_array );
-			//echo $date_formatted;
 			?>
 			
 			<table class="widefat">
 				<thead>
 					<tr>
-						<th>Title</th>
-						<th>Content</th>
-						<th>Email</th>
-						<th>Post Date</th>
-						<th>Status</th>
+						<th class="content">Reminder</th>
+						<th class="date">Send Reminder on</th>
+						<th class="email">Send To</th>
+						<?php //<th class="status">Status</th> ?>
 					</tr>
 				</thead>
 				<tfoot>
 					<tr>
-						<th>Post Title</th>
-						<th>Post Content</th>
-						<th>Email</th>
-						<th>Post Date</th>
-						<th>Status</th>
+						<th class="content">Reminder</th>
+						<th class="date">Reminder Date</th>
+						<th class="email">Send To</th>
+						<?php //<th class="status">Status</th> ?>
 					</tr>
 				</tfoot>
 				<tbody>
-					<?php foreach( $ereminder_array as $ereminder ): ?>
-						<tr>
-							<td><?php echo $ereminder->post_title; ?></td>
-							<td><?php echo $ereminder->post_content; ?></td>
-							<td><?php echo $ereminder->post_excerpt; ?></td>
-							<td><?php echo $ereminder->post_date; ?></td>
-							<td><?php echo $ereminder->post_status; ?></td>
-						</tr>
-					<?php endforeach; ?>
+					<?php if( empty( $ereminder_array ) ) : ?>
+						<tr><td colspan="4">There are currently no scheduled reminders.</td></t>
+					<?php else : ?>
+						<?php foreach( $ereminder_array as $ereminder ): ?>
+							<tr>
+								<td class="content"><?php echo $ereminder->post_content; ?></td>
+								<td class="date"><?php echo date( 'l, F j, Y @ g:i a', strtotime( $ereminder->post_date ) ); ?></td>
+								<td class="email"><?php echo $ereminder->post_excerpt; ?></td>
+								<?php //<td class="status"><?php echo $ereminder->post_status == 'draft' ? 'Scheduled' : 'Sent'; </td> ?>
+							</tr>
+						<?php endforeach; ?>
+					<?php endif; ?>
 				</tbody>
 			</table>
 		</div>

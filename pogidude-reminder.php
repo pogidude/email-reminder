@@ -11,11 +11,9 @@ TODO:
 1. Clean up database on uninstall *
 2. Add hour option ***
 3. Add option to set FROM email **
-4. Run cron every hour
 5. Create description **
 6. Add dashboard widget to add reminder from dashboard
 7. Add dashboard notifications
-8. Do validation/sanitation ***
 9. Add option for recurring reminders
 */
 
