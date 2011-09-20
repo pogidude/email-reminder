@@ -1,0 +1,20 @@
+
+/** wrap **/
+.ereminder{}
+
+.ereminder form{ background: #fafafa; border: 1px solid #ffffff;  font-family: Helvetica,Arial,sans-serif; max-width: 680px; padding: 18px 27px; }
+	.ereminder form p.field{ font-size: 24px; margin-top: 0; }
+		.ereminder p.field label{ color: #354757; font-size: 20px; font-weight: bold; }
+		.ereminder form p.field input{ border: 1px solid #ddd; color: #aaa; font-size: inherit; padding: 10px 15px; font-style: italic; }
+		.ereminder form p.field input:focus{ border-color: #d3d3d3;  color: #666; }
+		.ereminder .server-time{ }
+	.ereminder form input[type="submit"]{  }
+
+.ereminder .regular{ font-size: 13px; }
+
+/* Cutting Edge Stuff */
+.ereminder form{ background: -webkit-gradient(linear, left top, left bottom, from(#fafafa), to(#f3f3f3)); background: -moz-linear-gradient( top, #fcfcfc, #f3f3f3 ); background-color: #fafafa; box-shadow: 0 0 5px #c7c7c7; }
+/* IE Only */
+.ereminder form{ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fafafa', endColorstr='#f3f3f3'); }
+	.ereminder form p.field input{  background: -moz-linear-gradient( top, #f7f7f7, #fff ); box-shadow: 1px 1px 2px #e3e3e3; border-radius: 0px; }
+	.ereminder form p.field input:focus{ background: -moz-linear-gradient( top, #fafafa, #fff ); box-shadow: 1px 1px 3px #ddd; }
