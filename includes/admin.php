@@ -40,7 +40,7 @@ function pogidude_ereminder_page(){
 			$error['content'] = 'Please enter a reminder.';
 			$content = '';
 		} else {
-			$content = esc_attr( $_POST['pd-reminder-content'] );
+			$content = $_POST['pd-reminder-content'];
 		}
 		
 		//create shortened version of content to use as title
@@ -142,14 +142,14 @@ function pogidude_ereminder_page(){
 				
 				$current_time = current_time('mysql') + 60;
 				
-				$ereminder_array = $wpdb->get_results("
+				$ereminder_array = $wpdb->get_results( $wpdb->prepare("
 								SELECT *
 								FROM {$wpdb->posts}
 								WHERE post_date <= '{$current_time}'
 									AND post_type = 'ereminder'
 									
 								ORDER BY post_date ASC
-								");
+								") );
 			?>
 			
 			<table class="widefat">

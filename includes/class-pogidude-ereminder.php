@@ -122,14 +122,14 @@ Class Pogidude_Ereminder {
 			$date = current_time( 'mysql',0 );
 		}
 		
-		$ereminders = $wpdb->get_results("
+		$ereminders = $wpdb->get_results( $wpdb->prepare("
 			SELECT *
 			FROM {$wpdb->posts}
 			WHERE post_date < '{$date}'
 				AND post_type = 'ereminder'
 				AND post_status = 'draft'
 			ORDER BY post_date ASC
-		");
+		") );
 		
 		return $ereminders;
 	}//get_ereminders
