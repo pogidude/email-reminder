@@ -9,7 +9,7 @@ add_action('admin_menu', 'pogidude_ereminder_create_menu' );
 
 /** Add the admin menu page */
 function pogidude_ereminder_create_menu(){
-	$hook = add_dashboard_page( 'Create E-Reminder', 'E-Reminder', 'manage_options', 'pogidude-create-ereminder', 'pogidude_ereminder_page' );
+	$hook = add_dashboard_page( 'Create Email Reminder', 'Email Reminder', 'manage_options', 'pogidude-create-ereminder', 'pogidude_ereminder_page' );
 	
 	add_action( 'admin_print_scripts-' . $hook, 'pogidude_ereminder_display_scripts' );
 	add_action( 'admin_print_styles-' . $hook, 'pogidude_ereminder_display_styles' );
@@ -164,7 +164,7 @@ function pogidude_ereminder_page(){
 				<tfoot>
 					<tr>
 						<th class="content">Reminder</th>
-						<th class="date">Reminder Date</th>
+						<th class="date">Send Reminder on</th>
 						<th class="email">Send To</th>
 						<?php //<th class="status">Status</th> ?>
 					</tr>

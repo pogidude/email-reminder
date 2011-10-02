@@ -69,7 +69,7 @@ Class Pogidude_Ereminder {
 	public function send_ereminders(){
 	
 		//credits
-		$credits = 'This reminder was sent using Email Reminder WordPress plugin by <a href="http://pogidude.com">Ryann Micua</a>';
+		$credits = 'This reminder was sent using <a href="http://pogidude.com/email-reminder/">Email Reminder plugin</a> by <a href="http://pogidude.com/about/">Ryann Micua</a>';
 		
 		//get ereminders
 		$pd = new Pogidude_Ereminder;
@@ -77,7 +77,7 @@ Class Pogidude_Ereminder {
 		
 		foreach( $ereminders as $ereminder ){
 		
-			$subject = $ereminder->post_title;
+			$subject = '[Reminder] ' . $ereminder->post_title;
 			$to = $ereminder->post_excerpt;
 			
 			//use the email of the user who scheduled the reminder
@@ -157,8 +157,8 @@ Class Pogidude_Ereminder {
 			'public' => false,
 			'show_in_nav_menus' => false,
 			'exclude_from_search' => true,
-			'show_ui' => true,
-			'show_in_menu' => true,
+			'show_ui' => false,
+			'show_in_menu' => false,
 			'publicly_queryable' => false,
 			'query_var' => true,
 			'rewrite' => true,
