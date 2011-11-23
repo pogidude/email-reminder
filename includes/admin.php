@@ -25,6 +25,8 @@ function pogidude_ereminder_page(){
 	
 	/* check if submitted. TODO: Use nonces */
 	if( empty($_POST) || $_POST['checker'] !== 'submit' ){
+		//not submitted
+		
 		//default
 		$content = '';
 		$email = '';
@@ -33,6 +35,7 @@ function pogidude_ereminder_page(){
 		$message = '';
 		
 	} else {
+	//submitted
 	//if( !empty( $_POST ) && $_POST['checker'] === 'submit' ){
 	
 		//validate and sanitize content

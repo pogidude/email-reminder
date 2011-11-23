@@ -83,7 +83,7 @@ Class Pogidude_Ereminder {
 			//use the email of the user who scheduled the reminder
 			$author = get_userdata( $ereminder->post_author );
 			$author_email = $author->user_email;
-			$headers = 	"From: Email Reminder <{$author_email}>\n" .
+			$headers = 	"From: Email Reminder <{$author_email}>\r\n" .
 						"Content-Type: text/html;\r\n";
 			
 			$creation_date = date( 'l, F j, Y', strtotime( $ereminder->post_date ) );
