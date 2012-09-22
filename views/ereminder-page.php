@@ -40,7 +40,7 @@ $action = $data['action'];
 			<span class="regular server-time description"><strong>Current Time:</strong> <code><?php echo  date( 'F j, Y h:i A', strtotime( current_time('mysql') ) ); ?></code> as set in the <a href="<?php echo admin_url('options-general.php'); ?>">Timezone settings</a></span>
 		</p>
 		
-		<?php if( $action == 'edit' ) : ?>
+		<?php if( $action == 'update' ) : ?>
 			<input type="submit" value="Edit Reminder" class="button-primary" />
 			<a href="<?php echo admin_url('admin.php?page=pogidude-ereminder'); ?>" class="button-secondary">Cancel Editing</a>
 		<?php else: ?>
@@ -77,7 +77,15 @@ $action = $data['action'];
 	</div>
 	
 	<div class="reminder-list pder-sent">
-		<h3>Sent Reminders</h3>
+		<?php
+		$delete_all_link = add_query_arg( array(
+			'page' => 'pogidude-ereminder',
+			'pder-action' => 'delete-all',
+			'pder-submit' => 'true',
+			'pder-delete-all-sent-nonce' => wp_create_nonce( 'pder-delete-all-sent' ),
+		), admin_url('admin.php') );
+		?>
+		<h3>Sent Reminders <a href="<?php echo esc_url( $delete_all_link ); ?>" class="button-secondary">Delete all sent reminders</a></h3>
 		<?php
 			global $wpdb;
 			

@@ -52,9 +52,9 @@ switch( $type ){
 					
 					$delete_link = add_query_arg( array(
 						'page' => 'pogidude-ereminder',
-						'pder-action' => 'edit',
+						'pder-action' => 'delete',
 						'pder-submit' => 'true',
-						'pder-edit-reminder-nonce' => wp_create_nonce( 'pder-delete-reminder' ),
+						'pder-delete-reminder-nonce' => wp_create_nonce( 'pder-delete-reminder' ),
 						'postid' => $ereminder->ID
 					), admin_url('admin.php') );
 					?>

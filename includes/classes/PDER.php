@@ -28,7 +28,7 @@ class PDER{
 			FROM {$wpdb->posts}
 			WHERE post_date < '{$date}'
 				AND post_type = 'ereminder'
-				AND post_status = {$status}
+				AND post_status = '{$status}'
 			ORDER BY post_date ASC
 		") );
 		

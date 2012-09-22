@@ -46,7 +46,7 @@ class PDER_Admin{
 		
 		$data['messages'] = $this->_messages;
 		
-		$data['action'] = isset( $_REQUEST['pder-action'] ) && $_REQUEST['pder-action'] == 'edit' ? 'edit' : 'add';
+		$data['action'] = isset( $_REQUEST['pder-action'] ) && $_REQUEST['pder-action'] == 'edit' ? 'update' : 'add';
 		
 		$file = 'ereminder-page.php';
 		echo PDER_Utils::get_view( $file, $data );
@@ -58,13 +58,27 @@ class PDER_Admin{
 		if( isset( $_POST['pder-action'] ) && $_POST['pder-action'] == 'add' && check_admin_referer( 'pder-submit-reminder', 'pder-submit-reminder-nonce' ) ){
 			//A reminder was submitted for scheduling
 			$this->schedule_reminder( $_POST );
+			
+		} elseif( isset( $_POST['pder-action'] ) && $_POST['pder-action'] == 'update' && check_admin_referer( 'pder-submit-reminder', 'pder-submit-reminder-nonce' ) ){
+			//Update reminder
+			$this->update_reminder( $_POST );
+			
 		} elseif( $_REQUEST['pder-action'] == 'edit' && wp_verify_nonce( $_REQUEST['pder-edit-reminder-nonce'], 'pder-edit-reminder' ) ){
-			//Edit reminder
+			//Edit reminder. Stages reminder for updating
 			$this->edit_reminder( $_REQUEST );
+			
 		} elseif( $_REQUEST['pder-action'] == 'delete' && wp_verify_nonce( $_REQUEST['pder-delete-reminder-nonce'], 'pder-delete-reminder' ) ){
 			//Delete reminder
 			$this->delete_reminder( $_REQUEST );
+			
+		} elseif( $_REQUEST['pder-action'] == 'delete-all' && wp_verify_nonce( $_REQUEST['pder-delete-all-sent-nonce'], 'pder-delete-all-sent' ) ){
+			//delete all sent reminders
+			$this->delete_reminders_many( $_REQUEST, 'sent' );
 		}
+	}
+	
+	function update_reminder( $data ){
+		$this->schedule_reminder( $data );
 	}
 	
 	function schedule_reminder( $data ){
@@ -132,7 +146,7 @@ class PDER_Admin{
 			'post_status' => 'draft'
 		);
 		
-		if( isset( $data['postid'] ) && "" !== $data['postid'] && $data['pder-action'] == 'edit' ){
+		if( isset( $data['postid'] ) && "" !== $data['postid'] && $data['pder-action'] == 'update' ){
 			$reminder['ID'] = $data['postid'];
 		}
 		
@@ -144,7 +158,11 @@ class PDER_Admin{
 			if( empty( $insert_post_id ) ){
 				$this->_messages['error'][] = 'There was an error scheduling your reminder.';
 			} else {
-				$this->_messages['success'][] = 'Reminder <strong>#' . $insert_post_id . '</strong> scheduled for ' . date( 'F j, Y h:i A', strtotime( $date_all ) ) . ' added.';
+				if( $data['pder-action'] == 'update' ){
+					$this->_messages['success'][] = 'Updated reminder <strong>#' . $insert_post_id . '</strong> scheduled for ' . date( 'F j, Y h:i A', strtotime( $date_all ) ) . '.';
+				} else {
+					$this->_messages['success'][] = 'Reminder <strong>#' . $insert_post_id . '</strong> scheduled for ' . date( 'F j, Y h:i A', strtotime( $date_all ) ) . ' added.';
+				}
 				
 				//set to defaults
 				$clean = array(
@@ -176,20 +194,101 @@ class PDER_Admin{
 			'id' => $post->ID
 		);
 		
+		$message = 'Editing Reminder <strong>#' . $post->ID.'</strong>';
+		
 		if( isset( $data['ajax'] ) && $data['ajax'] == 'true' ){
 			$return = array(
-				'fields' => $fields
+				'fields' => $fields,
 				/** TODO: add new nonce? Refer http://wordpress.stackexchange.com/questions/19826/multiple-ajax-nonce-requests **/
+				'messages' => array(
+					'success' => array( 
+						$message
+					)
+				)
 			);
 			echo json_encode( $return );
 			exit();
 		} else {
 			$this->_field_data = $fields;
-			$this->_messages['success'][] = 'Editing Reminder <strong>#' . $post->ID.'</strong>';
+			$this->_messages['success'][] = $message;
 		}
 	}
 	
 	function delete_reminder( $data ){
+		error_log( 'deleting' );
+		$post_id = $data['postid'];
+		$post = get_post( $post_id );
+		$error = array();
+		$success = array();
+		
+		if( empty( $post ) ){
+			$error[] = 'Error: Invalid ID: <strong>#'. $post_id . '</strong>.';
+		} else {
+			$result = wp_delete_post( $post_id, true ); //bypass trash and force deletion
+			if( !$result ){
+				//failure
+				$error[] = 'Error: Failure deleting reminder <strong>#'. $post_id . '</strong>. Please try again.';
+			} else {
+				//successful
+				$success[] = 'Reminder <strong>#' . $post_id . '</strong> deleted.';
+			}
+		}
+		
+		/** Return response **/
+		if( isset( $data['ajax'] ) && $data['ajax'] == 'true' ){
+			$response = array(
+				/** TODO: add new nonce? Refer http://wordpress.stackexchange.com/questions/19826/multiple-ajax-nonce-requests **/
+				'messages' => array(
+					'success' => $success,
+					'error' => $error
+				)
+			);
+			echo json_encode( $response );
+			exit();
+		} else {
+			$this->_messages = array(
+				'success' => $success,
+				'error' => $error
+			);
+		}
+	}
+	
+	function delete_reminders_many( $data, $status = 'sent' ){
+		//get ereminders
+		$pd = new PDER;
+		$ereminders = $pd->get_ereminders(current_time( 'mysql',0 ), 'sent');
+		$success = array();
+		$error = array();
+		if( empty( $ereminders ) ){
+			/** TODO: error message? **/
+		} else {
+			foreach( $ereminders as $ereminder ){
+				if( wp_delete_post( $ereminder->ID ) ){
+					$success[] = 'Reminder <strong>#' . $ereminder->ID . '</strong> deleted.';
+				} else {
+					$error[] = 'Error deleting reminder <strong>#'. $ereminder->ID . '</strong>.';
+				}
+			}
+		}
+		
+		/** Return responses **/
+		if( isset( $data['ajax'] ) && $data['ajax'] == 'true' ){
+			$response = array(
+				/** TODO: add new nonce? Refer http://wordpress.stackexchange.com/questions/19826/multiple-ajax-nonce-requests **/
+				'messages' => array(
+					'success' => $success,
+					'error' => $error
+				)
+			);
+			echo json_encode( $response );
+			exit();
+		} else {
+			$this->_messages = array(
+				'success' => $success,
+				'error' => $error
+			);
+		}
+		
 	}
 	
 	function load_assets(){
