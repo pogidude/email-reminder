@@ -8,21 +8,27 @@ class PDER{
 	 * Selects all 'ereminders' custom post types from the 'posts' table whose 'post_date' is less than $date and 'post_status' = draft returns rows as a numerically indexed array of objects. Uses $wpdb->get_results() function to fetch the results from the database.
 	 *
 	 * @param string $date date in YYYY-MM-DD H:i:s format. Defaults to current local time
+	 * @param string $status draft|publish. corresponds to scheduled and sent reminders respectively
 	 * @return array numerically indexed array of row objects
 	 */
-	public function get_ereminders( $date = '' ) {
+	public function get_ereminders( $date = '', $status = 'draft' ) {
 		global $wpdb;
 		
 		if( $date == '' ){
 			$date = current_time( 'mysql',0 );
 		}
 		
+		if( $status == 'sent' ) 
+			$status = 'publish';
+		elseif( $status == 'scheduled' ) 
+			$status = 'draft';
+		
 		$ereminders = $wpdb->get_results( $wpdb->prepare("
 			SELECT *
 			FROM {$wpdb->posts}
 			WHERE post_date < '{$date}'
 				AND post_type = 'ereminder'
-				AND post_status = 'draft'
+				AND post_status = {$status}
 			ORDER BY post_date ASC
 		") );
 		
