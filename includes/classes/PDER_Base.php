@@ -3,30 +3,37 @@
 Class PDER_Base {
 	
 	public function __construct(){
+		$this->load_files();
 		$this->init();
+		$this->admin_init();
 	}
 	
-	public function init(){
-		//Load files
-		$this->loadFiles();
-		
+	public function init(){		
 		//register Ereminder Custom Post Type
 		add_action('init', array( $this,'register_post_type') );
+		add_action('init', array( $this, 'register_assets' ) );
 		
 		//specify our own cron interval
 		add_filter('cron_schedules', array( $this, 'add_cron_intervals' ) );
 		
-		//register our event
+		//register our event to cron
 		add_action('PDER_cron_send_reminders', array( 'PDER', 'send_ereminders') );
 	}
 	
-	function loadFiles(){
+	function load_files(){
 		/* Ereminder Class */
 		require_once( PDER_CLASSES . '/PDER.php' );
 		/* Admin */
 		require_once( PDER_CLASSES . '/PDER_Admin.php' );
 		/* Utilities */
 		require_once( PDER_CLASSES . '/PDER_Utils.php' );
+	}
+	
+	function admin_init(){
+		if( !is_admin() ) return;
+		
+		$admin = new PDER_Admin;
+		$admin->init();
 	}
 	
 	/**
@@ -109,6 +116,18 @@ Class PDER_Base {
 		);
 		
 		register_post_type( 'ereminder', $args );
+	}
+	
+	function register_assets(){
+		/** Scripts **/
+		wp_register_script('pder-datepicker', PDER_JS . '/jquery-ui-1.8.16.custom.min.js', array( 'jquery', 'jquery-ui-core' ) );
+		wp_register_script('pder-timepicker', PDER_JS . '/jquery.ui.timepicker.addon.js', array( 'pder-datepicker' ) );
+		wp_register_script('pder-admin-script', PDER_JS . '/script.js', array( 'pder-datepicker', 'pdertimepicker' ) );
+		
+		/** Styles **/
+		wp_register_style('pder-admin-style', PDER_CSS . '/style.css' );
+		wp_register_style('pder-datepicker-css', PDER_CSS . '/jquery.ui.datepicker.css' );
+		wp_register_style('pder-datepicker-css-custom', PDER_CSS . '/jquery-ui-1.8.16.custom.css' );
 	}
 	
 } //Pogidude_Email_Reminder

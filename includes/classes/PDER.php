@@ -33,7 +33,7 @@ class PDER{
 	 * Send Ereminders
 	 */
 	public static function send_ereminders(){
-	
+		error_log( 'Sending reminders' );
 		//credits
 		$credits = 'This reminder was sent using <a href="http://pogidude.com/email-reminder/">Email Reminder plugin</a> by <a href="http://pogidude.com/about/">Pogidude Web Studio</a>';
 		

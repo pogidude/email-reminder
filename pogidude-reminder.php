@@ -21,8 +21,9 @@ TODO:
 /* Constants */
 define( 'PDER_DIR', trailingslashit( plugin_dir_path( __FILE__ ) ) );
 define( 'PDER_URI', trailingslashit( plugins_url( '', __FILE__ ) ) );
-define( 'PDER_CSS', trailingslashit( PDER_URI ) . 'css' );
-define( 'PDER_JS', trailingslashit( PDER_URI ) . 'js' );
+define( 'PDER_ASSETS', PDER_URI . 'assets' );
+define( 'PDER_CSS', PDER_ASSETS . '/css' );
+define( 'PDER_JS', PDER_ASSETS . '/js' );
 define( 'PDER_INC_DIR', trailingslashit( PDER_DIR ) . 'includes' );
 define( 'PDER_CLASSES', trailingslashit( PDER_INC_DIR ). 'classes' );
 
