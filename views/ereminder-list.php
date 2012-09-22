@@ -33,7 +33,7 @@ switch( $type ){
 	</tfoot>
 	<tbody>
 		<?php if( empty( $ereminder_array ) ) : ?>
-			<tr><td colspan="4">No reminders found.</td></t>
+			<tr><td colspan="5">No reminders found.</td></t>
 		<?php else : ?>
 			<?php foreach( $ereminder_array as $ereminder ): ?>
 				<tr data-id="<?php echo $ereminder->ID; ?>">

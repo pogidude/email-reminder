@@ -215,7 +215,7 @@ class PDER_Admin{
 	}
 	
 	function delete_reminder( $data ){
-		error_log( 'deleting' );
+
 		$post_id = $data['postid'];
 		$post = get_post( $post_id );
 		$error = array();
