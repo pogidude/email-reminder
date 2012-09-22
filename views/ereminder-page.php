@@ -1,6 +1,7 @@
 <?php
 $fields = $data['fields'];
 $messages = $data['messages'];
+$action = $data['action'];
 ?>
 <div class="wrap ereminder">
 	<?php screen_icon('edit-comments'); ?>
@@ -38,8 +39,17 @@ $messages = $data['messages'];
 			<br />
 			<span class="regular server-time description"><strong>Current Time:</strong> <code><?php echo  date( 'F j, Y h:i A', strtotime( current_time('mysql') ) ); ?></code> as set in the <a href="<?php echo admin_url('options-general.php'); ?>">Timezone settings</a></span>
 		</p>
-		<input type="submit" value="Set Reminder" class="button-primary" />
-		<input type="hidden" name="pder-action" value="submit" />
+		
+		<?php if( $action == 'edit' ) : ?>
+			<input type="submit" value="Edit Reminder" class="button-primary" />
+			<a href="<?php echo admin_url('admin.php?page=pogidude-ereminder'); ?>" class="button-secondary">Cancel Editing</a>
+		<?php else: ?>
+			<input type="submit" value="Add Reminder" class="button-primary" />
+		<?php endif; ?>
+		
+		<input type="hidden" name="pder-action" value="<?php echo $action; ?>" />
+		<input type="hidden" name="pder-submit" value="true" />
+		<input type="hidden" id="pder-postid" name="postid" value="<?php echo $fields['id']; ?>" />
 		<?php wp_nonce_field( 'pder-submit-reminder', 'pder-submit-reminder-nonce' ); ?>
 	</form>
 	

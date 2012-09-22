@@ -38,21 +38,32 @@ class PDER_Admin{
 			'reminder' => '',
 			'email' => '',
 			'time' => date( 'h:00 a', $timenow + 60*60 ),
-			'date' => date( 'Y-m-d', $timenow )
+			'date' => date( 'Y-m-d', $timenow ),
+			'id' => ''
 		);
 
 		$data['fields'] = !empty( $this->_field_data ) ? $this->_field_data : $empty_fields;
 		
 		$data['messages'] = $this->_messages;
 		
+		$data['action'] = isset( $_REQUEST['pder-action'] ) && $_REQUEST['pder-action'] == 'edit' ? 'edit' : 'add';
+		
 		$file = 'ereminder-page.php';
 		echo PDER_Utils::get_view( $file, $data );
 	}
 	
 	function process_submissions(){
-		if( isset( $_POST['pder-action'] ) && $_POST['pder-action'] == 'submit' && check_admin_referer( 'pder-submit-reminder', 'pder-submit-reminder-nonce' ) ){
+		if( !isset( $_REQUEST['pder-submit'] ) || $_REQUEST['pder-submit'] != 'true' ) return;
+		
+		if( isset( $_POST['pder-action'] ) && $_POST['pder-action'] == 'add' && check_admin_referer( 'pder-submit-reminder', 'pder-submit-reminder-nonce' ) ){
 			//A reminder was submitted for scheduling
 			$this->schedule_reminder( $_POST );
+		} elseif( $_REQUEST['pder-action'] == 'edit' && wp_verify_nonce( $_REQUEST['pder-edit-reminder-nonce'], 'pder-edit-reminder' ) ){
+			//Edit reminder
+			$this->edit_reminder( $_REQUEST );
+		} elseif( $_REQUEST['pder-action'] == 'delete' && wp_verify_nonce( $_REQUEST['pder-delete-reminder-nonce'], 'pder-delete-reminder' ) ){
+			//Delete reminder
+			$this->delete_reminder( $_REQUEST );
 		}
 	}
 	
@@ -121,21 +132,27 @@ class PDER_Admin{
 			'post_status' => 'draft'
 		);
 		
+		if( isset( $data['postid'] ) && "" !== $data['postid'] && $data['pder-action'] == 'edit' ){
+			$reminder['ID'] = $data['postid'];
+		}
+		
 		if( empty( $error ) ){
 			//create new post
-			$insert_post_success = wp_insert_post( $reminder );
+			$insert_post_id = wp_insert_post( $reminder );
 			
-			if( empty( $insert_post_success ) ){
+			/** In theory, $insert_post_id can be 0, but very unlikely on a WP site **/
+			if( empty( $insert_post_id ) ){
 				$this->_messages['error'][] = 'There was an error scheduling your reminder.';
 			} else {
-				$this->_messages['success'][] = 'Reminder created successfully!';
+				$this->_messages['success'][] = 'Reminder <strong>#' . $insert_post_id . '</strong> scheduled for ' . date( 'F j, Y h:i A', strtotime( $date_all ) ) . ' added.';
 				
 				//set to defaults
 				$clean = array(
 					'reminder' => '',
 					'email' => '',
 					'time' => date( 'h:00 a', $timenow + 60*60 ),
-					'date' => date( 'Y-m-d', $timenow )
+					'date' => date( 'Y-m-d', $timenow ),
+					'id' => ''
 				);
 			}
 			
@@ -146,6 +163,35 @@ class PDER_Admin{
 		$this->_field_data = $clean;
 	}
 	
+	function edit_reminder( $data ){
+		//get ID
+		$post_id = $data['postid'];
+		$post = get_post( $post_id );
+		
+		$fields = array(
+			'reminder' => isset($post->post_content) ? $post->post_content : '',
+			'email' => isset( $post->post_excerpt ) ? $post->post_excerpt : '',
+			'time' => isset( $post->post_date ) ? date( 'h:i a', strtotime($post->post_date) ) : date( 'h:00 a', $timenow + 60*60 ),
+			'date' => isset( $post->post_date ) ? date( 'Y-m-d', strtotime( $post->post_date) ) : date( 'Y-m-d', $timenow ),
+			'id' => $post->ID
+		);
+		
+		if( isset( $data['ajax'] ) && $data['ajax'] == 'true' ){
+			$return = array(
+				'fields' => $fields
+				/** TODO: add new nonce? Refer http://wordpress.stackexchange.com/questions/19826/multiple-ajax-nonce-requests **/
+			);
+			echo json_encode( $return );
+			exit();
+		} else {
+			$this->_field_data = $fields;
+			$this->_messages['success'][] = 'Editing Reminder <strong>#' . $post->ID.'</strong>';
+		}
+	}
+	
+	function delete_reminder( $data ){
+	}
+	
 	function load_assets(){
 		/** Scripts **/
 		wp_enqueue_script('pder-admin-script' );
@@ -154,5 +200,9 @@ class PDER_Admin{
 		wp_enqueue_style('pder-admin-style' );
 		wp_enqueue_style('pder-datepicker-css' );
 		wp_enqueue_style('pder-datepicker-css-custom' );
+	}
+	
+	function get_js_vars(){
+		
 	}
 }
