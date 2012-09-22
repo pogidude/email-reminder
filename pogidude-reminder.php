@@ -3,7 +3,7 @@
 Plugin Name: Email Reminder
 Plugin URI: http://pogidude.com/email-reminder/
 Description: Schedules email reminders. Enter your reminder, where you'd like to email the reminder to, and when you'd like the reminder to be sent.
-Version: 0.1
+Version: 1.1
 License: GPLv2
 Author: Ryann Micua
 Author URI: http://pogidude.com/about/

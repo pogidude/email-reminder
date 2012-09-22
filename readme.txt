@@ -4,7 +4,7 @@ Donate link: http://pogidude.com/donate/
 Tags: email reminder, reminder
 Requires at least: 3.0
 Tested up to: 3.2
-Stable tag: 1.0
+Stable tag: 1.1
 
 Schedule email reminders. Enter your reminder, where you'd like to email the reminder to, and when you'd like the reminder to be sent.
 
@@ -45,6 +45,10 @@ Check in your spam folder. Sometimes, email messages are marked as spam by your 
 
 == Changelog ==
 
+= 1.1 =
+* Added edit and delete reminders functions.
+* Added list of sent reminders.
+
 = 1.0 =
 * Separated email headers with a CTRLF (\r\n) sent to wp_mail()
 
@@ -52,4 +56,8 @@ Check in your spam folder. Sometimes, email messages are marked as spam by your 
 * Original Version.
 
 == Upgrade Notice ==
-Original Version.
+= 1.1 =
+* Improved user interface
+
+= 0.1 =
+* Original Version.
