@@ -11,6 +11,7 @@
 		.ereminder form p.field input:focus{ border-color: #d3d3d3;  color: #666; }
 		.ereminder .server-time{ }
 	.ereminder form input[type="submit"]{  }
+	.ereminder form a.button-primary, .ereminder form a.button-secondary{ padding: 4px 10px; }
 
 .ereminder .regular{ font-size: 13px; }
 
