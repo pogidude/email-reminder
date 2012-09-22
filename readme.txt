@@ -4,7 +4,7 @@ Donate link: http://pogidude.com/donate/
 Tags: email reminder, reminder
 Requires at least: 3.0
 Tested up to: 3.2
-Stable tag: 0.1
+Stable tag: 1.0
 
 Schedule email reminders. Enter your reminder, where you'd like to email the reminder to, and when you'd like the reminder to be sent.
 
@@ -34,6 +34,10 @@ The plugin uses WordPress cron scheduler (WP Cron) to periodically check for rem
 
 But, there is a way to work around this problem by leveraging real Linux cron instead. Find out how by [reading this tutorial](http://pogidude.com/2011/use-linux-cron-to-trigger-wordpress-cron-scheduler/)
 
+= I don't see the reminder on my inbox =
+
+Check in your spam folder. Sometimes, email messages are marked as spam by your email provider especially if this is the first time you've used the plugin.
+
 == Screenshots ==
 
 1. Screenshot of email reminder interface
@@ -41,5 +45,11 @@ But, there is a way to work around this problem by leveraging real Linux cron in
 
 == Changelog ==
 
+= 1.0 =
+* Separated email headers with a CTRLF (\r\n) sent to wp_mail()
+
 = 0.1 =
 * Original Version.
+
+== Upgrade Notice ==
+Original Version.
