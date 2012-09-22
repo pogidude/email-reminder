@@ -3,16 +3,26 @@
  * Admin Pages
  * dashboard_page_pogidude-create-email-reminder 
  */
+ 
+class PDER_Admin{
+	function init(){
+	}
+	
+}
 
 add_action('admin_init', 'pogidude_ereminder_stylesscripts' );
 add_action('admin_menu', 'pogidude_ereminder_create_menu' );
 
 /** Add the admin menu page */
 function pogidude_ereminder_create_menu(){
-	$hook = add_dashboard_page( 'Create Email Reminder', 'Email Reminder', 'manage_options', 'pogidude-create-ereminder', 'pogidude_ereminder_page' );
+	$hooks = array();
+	$hooks[] = add_dashboard_page( 'Create Email Reminder', 'Email Reminder', 'manage_options', 'pogidude-ereminder', 'pogidude_ereminder_page' );
+	$hooks[] = add_menu_page('Create Email Reminder', 'Email Reminder', 'manage_options', 'pogidude-ereminder', 'pogidude_ereminder_page' );
 	
-	add_action( 'admin_print_scripts-' . $hook, 'pogidude_ereminder_display_scripts' );
-	add_action( 'admin_print_styles-' . $hook, 'pogidude_ereminder_display_styles' );
+	foreach( $hooks as $hook ){
+		add_action( 'admin_print_scripts-' . $hook, 'pogidude_ereminder_display_scripts' );
+		add_action( 'admin_print_styles-' . $hook, 'pogidude_ereminder_display_styles' );
+	}
 }
 
 /** Draw the menu page **/
@@ -196,12 +206,12 @@ function pogidude_ereminder_page(){
 
 /** Register styles and scripts **/
 function pogidude_ereminder_stylesscripts(){
-	wp_register_script('jquery-datepicker', PD_EREMINDER_JS . '/jquery-ui-1.8.16.custom.min.js', array( 'jquery', 'jquery-ui-core' ) );
-	wp_register_script('jquery-timepicker', PD_EREMINDER_JS . '/jquery.ui.timepicker.addon.js', array( 'jquery-datepicker' ) );
-	wp_register_script('pogidude-ereminder-script', PD_EREMINDER_JS . '/script.js', array( 'jquery-datepicker', 'jquery-timepicker' ) );
-	wp_register_style('pogidude-ereminder-style', PD_EREMINDER_CSS . '/style.css' );
-	wp_register_style('jquery-datepicker-css', PD_EREMINDER_CSS . '/jquery.ui.datepicker.css' );
-	wp_register_style('jquery-datepicker-css-custom', PD_EREMINDER_CSS . '/jquery-ui-1.8.16.custom.css' );
+	wp_register_script('jquery-datepicker', PDER_JS . '/jquery-ui-1.8.16.custom.min.js', array( 'jquery', 'jquery-ui-core' ) );
+	wp_register_script('jquery-timepicker', PDER_JS . '/jquery.ui.timepicker.addon.js', array( 'jquery-datepicker' ) );
+	wp_register_script('pogidude-ereminder-script', PDER_JS . '/script.js', array( 'jquery-datepicker', 'jquery-timepicker' ) );
+	wp_register_style('pogidude-ereminder-style', PDER_CSS . '/style.css' );
+	wp_register_style('jquery-datepicker-css', PDER_CSS . '/jquery.ui.datepicker.css' );
+	wp_register_style('jquery-datepicker-css-custom', PDER_CSS . '/jquery-ui-1.8.16.custom.css' );
 }
 
 /** Enqueue scripts **/

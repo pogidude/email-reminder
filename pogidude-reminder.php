@@ -19,21 +19,19 @@ TODO:
 */
 
 /* Constants */
-define( 'PD_EREMINDER_DIR', trailingslashit( plugin_dir_path( __FILE__ ) ) );
-define( 'PD_EREMINDER_URI', trailingslashit( plugins_url( '', __FILE__ ) ) );
-define( 'PD_EREMINDER_CSS', trailingslashit( PD_EREMINDER_URI ) . 'css' );
-define( 'PD_EREMINDER_JS', trailingslashit( PD_EREMINDER_URI ) . 'js' );
-define( 'PD_EREMINDER_INC_DIR', trailingslashit( PD_EREMINDER_DIR ) . 'includes' );
+define( 'PDER_DIR', trailingslashit( plugin_dir_path( __FILE__ ) ) );
+define( 'PDER_URI', trailingslashit( plugins_url( '', __FILE__ ) ) );
+define( 'PDER_CSS', trailingslashit( PDER_URI ) . 'css' );
+define( 'PDER_JS', trailingslashit( PDER_URI ) . 'js' );
+define( 'PDER_INC_DIR', trailingslashit( PDER_DIR ) . 'includes' );
+define( 'PDER_CLASSES', trailingslashit( PDER_INC_DIR ). 'classes' );
 
-/* Ereminder Class */
-require_once( trailingslashit( PD_EREMINDER_INC_DIR ) . 'class-pogidude-ereminder.php' );
-
-/* Admin Page */
-require_once( trailingslashit( PD_EREMINDER_INC_DIR ) . 'admin.php' );
+/* Load Base class */
+require_once( trailingslashit( PDER_CLASSES ) . 'PDER_Base.php' );
 
 /* View Cron Events Page */
-//require_once( trailingslashit( PD_EREMINDER_INC_DIR ) . 'admin-cron-events.php' );
+//require_once( trailingslashit( PDER_INC_DIR ) . 'admin-cron-events.php' );
 
 /* activation/deactivation stuff */
-register_activation_hook( __FILE__, array('Pogidude_Ereminder','on_activate' ) );
-register_deactivation_hook( __FILE__, array('Pogidude_Ereminder','on_deactivate' ) );
+register_activation_hook( __FILE__, array('PDER_Base','on_activate' ) );
+register_deactivation_hook( __FILE__, array('PDER_Base','on_deactivate' ) );
