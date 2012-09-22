@@ -29,15 +29,10 @@ class PDER{
 		return $ereminders;
 	}//get_ereminders
 	
-	public static function schedule_reminder( $data ){
-		
-	}
-	
 	/**
 	 * Send Ereminders
 	 */
 	public static function send_ereminders(){
-		error_log( 'Sending reminders' );
 		
 		//credits
 		$credits = 'This reminder was sent using <a href="http://pogidude.com/email-reminder/">Email Reminder plugin</a> by <a href="http://pogidude.com/about/">Pogidude Web Studio</a>';
@@ -71,8 +66,8 @@ class PDER{
 				//set post to 'publish' or delete the post
 				$args = array( 'ID' => $ereminder->ID, 'post_status' => 'publish', 'post_date' => $ereminder->post_date, 'post_date_gmt' => $ereminder->post_date_gmt, 'post_modified' => current_time('mysql',0), 'post_modified_gmt' => current_time('mysql',1) );
 				
-				//wp_update_post( $args );
-				wp_delete_post( $ereminder->ID );
+				wp_update_post( $args );
+				//wp_delete_post( $ereminder->ID );
 			}
 			
 		}

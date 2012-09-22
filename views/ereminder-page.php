@@ -43,7 +43,7 @@ $messages = $data['messages'];
 		<?php wp_nonce_field( 'pder-submit-reminder', 'pder-submit-reminder-nonce' ); ?>
 	</form>
 	
-	<div class="reminder-list">
+	<div class="reminder-list pder-scheduled">
 		<h3>Scheduled Reminders</h3>
 		<?php
 			global $wpdb;
@@ -55,43 +55,38 @@ $messages = $data['messages'];
 							FROM {$wpdb->posts}
 							WHERE post_date <= '{$current_time}'
 								AND post_type = 'ereminder'
-								
+								AND post_status = 'draft'
 							ORDER BY post_date ASC
 							") );
+			$scheduled_data = array(
+				'list' => $ereminder_array,
+				'type' => 'scheduled'
+			);
+			echo PDER_Utils::get_view( 'ereminder-list.php', $scheduled_data );
 		?>
-		
-		<table class="widefat">
-			<thead>
-				<tr>
-					<th class="content">Reminder</th>
-					<th class="date">Send Reminder on</th>
-					<th class="email">Send To</th>
-					<?php //<th class="status">Status</th> ?>
-				</tr>
-			</thead>
-			<tfoot>
-				<tr>
-					<th class="content">Reminder</th>
-					<th class="date">Send Reminder on</th>
-					<th class="email">Send To</th>
-					<?php //<th class="status">Status</th> ?>
-				</tr>
-			</tfoot>
-			<tbody>
-				<?php if( empty( $ereminder_array ) ) : ?>
-					<tr><td colspan="4">There are currently no scheduled reminders.</td></t>
-				<?php else : ?>
-					<?php foreach( $ereminder_array as $ereminder ): ?>
-						<tr>
-							<td class="content"><?php echo $ereminder->post_content; ?></td>
-							<td class="date"><?php echo date( 'l, F j, Y @ g:i a', strtotime( $ereminder->post_date ) ); ?></td>
-							<td class="email"><?php echo $ereminder->post_excerpt; ?></td>
-							<?php //<td class="status"><?php echo $ereminder->post_status == 'draft' ? 'Scheduled' : 'Sent'; </td> ?>
-						</tr>
-					<?php endforeach; ?>
-				<?php endif; ?>
-			</tbody>
-		</table>
+	</div>
+	
+	<div class="reminder-list pder-sent">
+		<h3>Sent Reminders</h3>
+		<?php
+			global $wpdb;
+			
+			$current_time = current_time('mysql') + 60;
+			
+			$ereminder_array = $wpdb->get_results( $wpdb->prepare("
+							SELECT *
+							FROM {$wpdb->posts}
+							WHERE post_date <= '{$current_time}'
+								AND post_type = 'ereminder'
+								AND post_status = 'publish'
+							ORDER BY post_date DESC
+							") );
+			$scheduled_data = array(
+				'list' => $ereminder_array,
+				'type' => 'sent'
+			);
+			echo PDER_Utils::get_view( 'ereminder-list.php', $scheduled_data );
+		?>
 	</div>
 	
 </div>

@@ -45,7 +45,7 @@ class PDER_Admin{
 		
 		$data['messages'] = $this->_messages;
 		
-		$file = 'ereminder_page.php';
+		$file = 'ereminder-page.php';
 		echo PDER_Utils::get_view( $file, $data );
 	}
 	
@@ -59,9 +59,9 @@ class PDER_Admin{
 	function schedule_reminder( $data ){
 		$clean = array();
 		$error = array();
-		error_log( print_r( $data, true ) );
+
 		if( empty( $data['pder'] ) || !is_array( $data['pder'] ) ) return;
-		error_log('processing');
+
 		$pder = $data['pder'];
 		
 		/** Validate/Sanitize **/
