@@ -5,8 +5,13 @@
  */
  
 class PDER_Admin{
+	
+	private $_field_data = null;
+	private $_messages = array( 'error' => array(), 'success' => array() );
+	
 	function init(){
 		add_action('admin_menu', array( &$this, 'create_menu' ) );
+		add_action('init', array( &$this, 'process_submissions' ) );
 	}
 
 	/** Add the admin menu page */
@@ -22,181 +27,123 @@ class PDER_Admin{
 	}
 	
 	function ereminder_page(){
-	
+		$data = array();
+
 		$timenow = strtotime( current_time('mysql',0) );//local time
 		$timenow_gmt = time();//utc time
 		$timedelta = $timenow_gmt - $timenow;//if positive, local time is -gmt. else +gmt
 		$error = array();
 		
-		/* check if submitted. TODO: Use nonces */
-		if( empty($_POST) || $_POST['checker'] !== 'submit' ){
-			//not submitted
-			
-			//default
-			$content = '';
-			$email = '';
-			$time = date( 'h:00 a', $timenow + 60*60 );
-			$date = date( 'Y-m-d', $timenow );
-			$message = '';
-			
-		} else {
-		//submitted
-		//if( !empty( $_POST ) && $_POST['checker'] === 'submit' ){
+		$empty_fields = array(
+			'reminder' => '',
+			'email' => '',
+			'time' => date( 'h:00 a', $timenow + 60*60 ),
+			'date' => date( 'Y-m-d', $timenow )
+		);
+
+		$data['fields'] = !empty( $this->_field_data ) ? $this->_field_data : $empty_fields;
 		
-			//validate and sanitize content
-			if( '' == $_POST['pd-reminder-content'] ){
-				$error['content'] = 'Please enter a reminder.';
-				$content = '';
-			} else {
-				$content = $_POST['pd-reminder-content'];
-			}
-			
-			//create shortened version of content to use as title
-			$title = substr( $content, 0, 30 );
-			//add elipses to title if needed
-			if( strlen( $content ) > 30 ){
-				$title = $title . '...';
-			}
-			
-			//validate email
-			if( '' == $_POST['pd-reminder-email'] || !is_email( $_POST['pd-reminder-email'] ) ){
-				$error['email'] = 'Please enter a valid e-mail address.';
-				$email = '';
-			} else {
-				$email = $_POST['pd-reminder-email'];
-			}
-			
-			//validate dates and specify default ones if needed
-			$date_unformatted = empty( $_POST['pd-reminder-date'] )? $timenow : strtotime( $_POST['pd-reminder-date'] );
-			$time_unformatted = empty( $_POST['pd-reminder-time'] ) ? $timenow + 60*60 : strtotime( $_POST['pd-reminder-time'] );
-			
-			//convert date and time into required format for database entry (YYYY-MM-DD HH:MM:SS)
-			$date = date( 'Y-m-d', $date_unformatted );
-			$time = date( 'H:i:s', $time_unformatted );
-			$date_all = "{$date} {$time}";
-			
-			//determine gmt time for schedule
-			$date_all_gmt = date( 'Y-m-d H:i:s', strtotime( $date_all ) + $timedelta );
-			
-			$reminder = array(
-				'post_title' => $title,
-				'post_content' => $content,
-				'post_type' => 'ereminder',
-				'post_date' => $date_all,
-				'post_date_gmt' => $date_all_gmt,
-				'post_excerpt' => $email,
-				'post_status' => 'draft'
-			);
-			
-			if( empty( $error ) ){
-				//create new post
-				$insert_post_success = wp_insert_post( $reminder );
-				
-				if( empty( $insert_post_success ) ){
-					$message = '<div class="error message">There was an error scheduling your reminder.</div>' . "\n";
-				} else {
-					$message = '<div class="updated message">Reminder created successfully!</div>' . "\n";
-					//set to default
-					$content = '';
-					$email = '';
-					$time = date( 'h:00 a', $timenow + 60*60 );
-					$date = date( 'Y-m-d', $timenow );
-				}
-				
-			} else {
-				$message = '<div class="message error">' . "\n";
-				foreach( $error as $eid => $e ){
-					$message .= $e . "<br />\n";
-				}
-				$message .= '</div>' . "\n";
-			}
-			
+		$data['messages'] = $this->_messages;
+		
+		$file = 'ereminder_page.php';
+		echo PDER_Utils::get_view( $file, $data );
+	}
+	
+	function process_submissions(){
+		if( isset( $_POST['pder-action'] ) && $_POST['pder-action'] == 'submit' && check_admin_referer( 'pder-submit-reminder', 'pder-submit-reminder-nonce' ) ){
+			//A reminder was submitted for scheduling
+			$this->schedule_reminder( $_POST );
+		}
+	}
+	
+	function schedule_reminder( $data ){
+		$clean = array();
+		$error = array();
+		error_log( print_r( $data, true ) );
+		if( empty( $data['pder'] ) || !is_array( $data['pder'] ) ) return;
+		error_log('processing');
+		$pder = $data['pder'];
+		
+		/** Validate/Sanitize **/
+		//Reminder
+		if( '' === $pder['reminder'] ){
+			$error['reminder'] = 'Please enter a reminder.';
+			$clean['reminder'] = '';
+		} else {
+			$clean['reminder'] = $pder['reminder'];
+		}
+		//create shortened version of reminder to use as title
+		$title = substr( $clean['reminder'], 0, 30 );
+		//add elipses to title if needed
+		if( strlen( $clean['reminder'] ) > 30 ){
+			$title = $title . '...';
 		}
 		
-		?>
+		//Email
+		if( '' === $pder['email'] || !is_email( $pder['email'] ) ){
+			$error['email'] = 'Please enter a valid e-mail address.';
+			$clean['email'] = '';
+		} else {
+			$clean['email'] = $pder['email'];
+		}
 		
-		<div class="wrap ereminder">
-			<?php screen_icon('edit-comments'); ?>
-			<h2 class="page-title">Create Email Reminder</h2>
+		//Dates
+		$timenow = strtotime( current_time('mysql',0) );//local time
+		$timenow_gmt = time();//utc time
+		$timedelta = $timenow_gmt - $timenow;//if positive, local time is -gmt. else +gmt
+		
+		//validate dates and specify default ones if needed
+		if( '' === $pder['date'] ){
+			$error['date'] = 'Please enter date in the correct format (YYYY-MM-DD).';
+		}
+		if( '' === $pder['time'] ){
+			$error['time'] = 'Please enter time in the correct format (HH:MM:S).';
+		}
+		$date_unformatted = empty( $pder['date'] )? $timenow : strtotime( $pder['date'] );
+		$time_unformatted = empty( $pder['time'] ) ? $timenow + 60*60 : strtotime( $pder['time'] );
+		
+		//convert date and time into required format for database entry (YYYY-MM-DD HH:MM:SS)
+		$clean['date'] = date( 'Y-m-d', $date_unformatted );
+		$clean['time'] = date( 'H:i:s', $time_unformatted );
+		$date_all = "{$clean['date']} {$clean['time']}";
+		
+		//determine gmt time for schedule
+		$date_all_gmt = date( 'Y-m-d H:i:s', strtotime( $date_all ) + $timedelta );
+		
+		//Setup for writing to database
+		$reminder = array(
+			'post_title' => $title,
+			'post_content' => $clean['reminder'],
+			'post_type' => PDER_POSTTYPE,
+			'post_date' => $date_all,
+			'post_date_gmt' => $date_all_gmt,
+			'post_excerpt' => $clean['email'],
+			'post_status' => 'draft'
+		);
+		
+		if( empty( $error ) ){
+			//create new post
+			$insert_post_success = wp_insert_post( $reminder );
 			
-			<?php if( !empty( $message ) ) :
-				echo $message;
-			endif; ?>
-			
-			<form method="POST" action="">
-				<p class="field">
-					<label for="pd-reminder-content">Enter your reminder</label><br />
-					<input type="text" size="40" name="pd-reminder-content" id="pd-reminder-content" placeholder="Send Dad a birthday card" value="<?php echo $content; ?>" title="Type your reminder here." />
-				</p>
-				<p class="field">
-					<label for="pd-reminder-email" title="Leave this field blank to send email to yourself">Email address to send reminder to</label><br />
-					<input type="email" size="40" name="pd-reminder-email" id="pd-reminder-email" placeholder="youemailaddress@email.com" title="Where to email the reminder to. Leave this field blank to send email to yourself" value="<?php echo $email; ?>" />
-				</p>
-				<p class="field">
-					<label for="pd-reminder-date">When to send reminder</label><br />
-					<input type="text" size="20" name="pd-reminder-date" id="pd-reminder-date" value="<?php echo $date; ?>" placeholder="YYYY-MM-DD" title="Set the date for the reminder (Format: YYYY-MM-DD)" />
-					<input type="text" size="15" name="pd-reminder-time" id="pd-reminder-time" value="<?php echo $time; ?>" placeholder="<?php echo date( 'H:00', strtotime( current_time('mysql',0) ) ); ?>" title="Set the time for the reminder. Format: HH:MM. Example: 15:30 or 3:30pm" />
-					<br />
-					<span class="regular server-time description"><strong>Current Time:</strong> <code><?php echo  date( 'F j, Y h:i A', strtotime( current_time('mysql') ) ); ?></code> as set in the <a href="<?php echo admin_url('options-general.php'); ?>">Timezone settings</a></span>
-				</p>
-				<input type="submit" value="Set Reminder" class="button-primary" />
-				<input type="hidden" name="checker" value="submit" />
-			</form>
-			
-			<div class="reminder-list">
-				<h3>Scheduled Reminders</h3>
-				<?php
-					global $wpdb;
-					
-					$current_time = current_time('mysql') + 60;
-					
-					$ereminder_array = $wpdb->get_results( $wpdb->prepare("
-									SELECT *
-									FROM {$wpdb->posts}
-									WHERE post_date <= '{$current_time}'
-										AND post_type = 'ereminder'
-										
-									ORDER BY post_date ASC
-									") );
-				?>
+			if( empty( $insert_post_success ) ){
+				$this->_messages['error'][] = 'There was an error scheduling your reminder.';
+			} else {
+				$this->_messages['success'][] = 'Reminder created successfully!';
 				
-				<table class="widefat">
-					<thead>
-						<tr>
-							<th class="content">Reminder</th>
-							<th class="date">Send Reminder on</th>
-							<th class="email">Send To</th>
-							<?php //<th class="status">Status</th> ?>
-						</tr>
-					</thead>
-					<tfoot>
-						<tr>
-							<th class="content">Reminder</th>
-							<th class="date">Send Reminder on</th>
-							<th class="email">Send To</th>
-							<?php //<th class="status">Status</th> ?>
-						</tr>
-					</tfoot>
-					<tbody>
-						<?php if( empty( $ereminder_array ) ) : ?>
-							<tr><td colspan="4">There are currently no scheduled reminders.</td></t>
-						<?php else : ?>
-							<?php foreach( $ereminder_array as $ereminder ): ?>
-								<tr>
-									<td class="content"><?php echo $ereminder->post_content; ?></td>
-									<td class="date"><?php echo date( 'l, F j, Y @ g:i a', strtotime( $ereminder->post_date ) ); ?></td>
-									<td class="email"><?php echo $ereminder->post_excerpt; ?></td>
-									<?php //<td class="status"><?php echo $ereminder->post_status == 'draft' ? 'Scheduled' : 'Sent'; </td> ?>
-								</tr>
-							<?php endforeach; ?>
-						<?php endif; ?>
-					</tbody>
-				</table>
-			</div>
+				//set to defaults
+				$clean = array(
+					'reminder' => '',
+					'email' => '',
+					'time' => date( 'h:00 a', $timenow + 60*60 ),
+					'date' => date( 'Y-m-d', $timenow )
+				);
+			}
 			
-		</div>
+		} else {
+			$this->_messages['error'] = $error;
+		}
 		
-		<?php
+		$this->_field_data = $clean;
 	}
 	
 	function load_assets(){

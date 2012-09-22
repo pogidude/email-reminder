@@ -26,6 +26,9 @@ define( 'PDER_CSS', PDER_ASSETS . '/css' );
 define( 'PDER_JS', PDER_ASSETS . '/js' );
 define( 'PDER_INC_DIR', trailingslashit( PDER_DIR ) . 'includes' );
 define( 'PDER_CLASSES', trailingslashit( PDER_INC_DIR ). 'classes' );
+define( 'PDER_VIEWS', PDER_DIR . 'views' );
+define( 'PDER_POSTTYPE', 'ereminder' );
+define( 'PDER_DOMAIN', 'pd-ereminder' );
 
 /* Load Base class */
 require_once( trailingslashit( PDER_CLASSES ) . 'PDER_Base.php' );

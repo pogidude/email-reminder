@@ -122,7 +122,7 @@ Class PDER_Base {
 		/** Scripts **/
 		wp_register_script('pder-datepicker', PDER_JS . '/jquery-ui-1.8.16.custom.min.js', array( 'jquery', 'jquery-ui-core' ) );
 		wp_register_script('pder-timepicker', PDER_JS . '/jquery.ui.timepicker.addon.js', array( 'pder-datepicker' ) );
-		wp_register_script('pder-admin-script', PDER_JS . '/script.js', array( 'pder-datepicker', 'pdertimepicker' ) );
+		wp_register_script('pder-admin-script', PDER_JS . '/script.js', array( 'pder-datepicker', 'pder-timepicker' ) );
 		
 		/** Styles **/
 		wp_register_style('pder-admin-style', PDER_CSS . '/style.css' );
