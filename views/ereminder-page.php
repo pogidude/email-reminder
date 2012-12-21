@@ -63,11 +63,11 @@ $action = $data['action'];
 			$ereminder_array = $wpdb->get_results( $wpdb->prepare("
 							SELECT *
 							FROM {$wpdb->posts}
-							WHERE post_date <= '{$current_time}'
+							WHERE post_date <= %s
 								AND post_type = 'ereminder'
 								AND post_status = 'draft'
 							ORDER BY post_date ASC
-							") );
+							", $current_time) );
 			$scheduled_data = array(
 				'list' => $ereminder_array,
 				'type' => 'scheduled'
@@ -94,11 +94,11 @@ $action = $data['action'];
 			$ereminder_array = $wpdb->get_results( $wpdb->prepare("
 							SELECT *
 							FROM {$wpdb->posts}
-							WHERE post_date <= '{$current_time}'
+							WHERE post_date <= %s
 								AND post_type = 'ereminder'
 								AND post_status = 'publish'
 							ORDER BY post_date DESC
-							") );
+							", $current_time) );
 			$scheduled_data = array(
 				'list' => $ereminder_array,
 				'type' => 'sent'

@@ -26,11 +26,11 @@ class PDER{
 		$ereminders = $wpdb->get_results( $wpdb->prepare("
 			SELECT *
 			FROM {$wpdb->posts}
-			WHERE post_date < '{$date}'
+			WHERE post_date < %s
 				AND post_type = 'ereminder'
-				AND post_status = '{$status}'
+				AND post_status = %s
 			ORDER BY post_date ASC
-		") );
+		", $date, $status) );
 		
 		return $ereminders;
 	}//get_ereminders

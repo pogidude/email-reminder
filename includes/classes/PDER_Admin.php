@@ -49,7 +49,7 @@ class PDER_Admin{
 		$data['action'] = isset( $_REQUEST['pder-action'] ) && $_REQUEST['pder-action'] == 'edit' ? 'update' : 'add';
 		
 		$file = 'ereminder-page.php';
-		header('Content-type: text/html; charset=utf-8');
+		//header('Content-type: text/html; charset=utf-8');
 		echo PDER_Utils::get_view( $file, $data );
 	}
 	
