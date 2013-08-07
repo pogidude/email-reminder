@@ -6,29 +6,38 @@
 
 .ereminder form{ background: #fafafa; border: 1px solid #ffffff;  font-family: Helvetica,Arial,sans-serif; max-width: 680px; padding: 18px 27px; margin-bottom: 25px; }
 	.ereminder form p.field{ font-size: 24px; margin-top: 0; }
-		.ereminder p.field label{ color: #354757; font-size: 20px; font-weight: bold; }
-		.ereminder form p.field input{ border: 1px solid #ddd; color: #aaa; font-size: inherit; padding: 10px 15px; font-style: italic; }
+		.ereminder p.field label{ color: #354757; display: block; font-size: 20px; font-weight: bold; line-height: 1; margin: 0 0 3px; }
+		.ereminder form p.field input{ border: 1px solid #ddd; color: #aaa; font-size: inherit; padding: 10px 15px; font-style: italic; line-height: 1; }
 		.ereminder form p.field input:focus{ border-color: #d3d3d3;  color: #666; }
 		.ereminder .server-time{ }
 	.ereminder form input[type="submit"]{  }
-	.ereminder form a.button-primary, .ereminder form a.button-secondary{ padding: 4px 10px; }
+	.ereminder form a.button-primary, .ereminder form a.button-secondary{}
 
 .ereminder .regular{ font-size: 13px; }
 
 /* Cutting Edge Stuff */
 .ereminder form{ 
-	background-image: linear-gradient(top, #FAFAFA, #F3F3F3);
-	background-image: -o-linear-gradient(top, #FAFAFA, #F3F3F3);
-	background-image: -moz-linear-gradient(top, #FAFAFA, #F3F3F3);
-	background-image: -webkit-linear-gradient(top, #FAFAFA, #F3F3F3);
-	background-image: -ms-linear-gradient(top, #FAFAFA, #F3F3F3);
-	background-image: -webkit-gradient( linear,	left top, left bottom, from(#FAFAFA), to(#F3F3F3) );
+	background-image: linear-gradient(top, #fcfcfc, #F3F3F3);
+	background-image: -o-linear-gradient(top, #fcfcfc, #F3F3F3);
+	background-image: -moz-linear-gradient(top, #fcfcfc, #F3F3F3);
+	background-image: -webkit-linear-gradient(top, #fcfcfc, #F3F3F3);
+	background-image: -ms-linear-gradient(top, #fcfcfc, #F3F3F3);
+	background-image: -webkit-gradient( linear,	left top, left bottom, from(#fcfcfc), to(#F3F3F3) );
 	box-shadow: 0 0 5px #c7c7c7; 
 }
-/* IE Only */
-.ereminder form{ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fafafa', endColorstr='#f3f3f3'); }
-	.ereminder form p.field input{  background: -moz-linear-gradient( top, #f7f7f7, #fff ); box-shadow: 0 0 3px #e1e1e1; border-radius: 0px; }
-	.ereminder form p.field input:focus{ background: -moz-linear-gradient( top, #fafafa, #fff ); box-shadow: 0 0 3px #ddd; }
+
+.ereminder form{ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fcfcfc', endColorstr='#f3f3f3'); }
+	.ereminder form p.field input{  background: #fff; /* Old browsers */
+background: -moz-linear-gradient(top, #fafafa 0%, #ffffff 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fafafa), color-stop(100%,#ffffff)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top, #fafafa 0%,#ffffff 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, #fafafa 0%,#ffffff 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top, #fafafa 0%,#ffffff 100%); /* IE10+ */
+background: linear-gradient(to bottom, #fafafa 0%,#ffffff 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fafafa', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
+	box-shadow: 0 0 3px #e1e1e1; border-radius: 2px; }
+
+	.ereminder form p.field input:focus{ box-shadow: 0 0 3px #ddd; }
 	
 .ereminder table.widefat{ max-width: 900px; }
 	.ereminder table .content{ min-width: 150px; }

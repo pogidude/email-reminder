@@ -25,15 +25,15 @@ $action = $data['action'];
 	
 	<form method="POST" action="">
 		<p class="field">
-			<label for="pd-reminder-content">Enter your reminder</label><br />
+			<label for="pd-reminder-content">Enter your reminder</label>
 			<input type="text" size="40" name="pder[reminder]" id="pd-reminder-content" placeholder="Send Dad a birthday card" value="<?php echo $fields['reminder']; ?>" title="Type your reminder here." />
 		</p>
 		<p class="field">
-			<label for="pd-reminder-email" title="Leave this field blank to send email to yourself">Email address to send reminder to</label><br />
+			<label for="pd-reminder-email" title="Leave this field blank to send email to yourself">Email address to send reminder to</label>
 			<input type="email" size="40" name="pder[email]" id="pd-reminder-email" placeholder="youemailaddress@email.com" title="Where to email the reminder to. Leave this field blank to send email to yourself" value="<?php echo $fields['email']; ?>" />
 		</p>
 		<p class="field">
-			<label for="pd-reminder-date">When to send reminder</label><br />
+			<label for="pd-reminder-date">When to send reminder</label>
 			<input type="text" size="20" name="pder[date]" id="pd-reminder-date" value="<?php echo $fields['date']; ?>" placeholder="YYYY-MM-DD" title="Set the date for the reminder (Format: YYYY-MM-DD)" />
 			<input type="text" size="15" name="pder[time]" id="pd-reminder-time" value="<?php echo $fields['time']; ?>" placeholder="<?php echo date( 'H:00', strtotime( current_time('mysql',0) ) ); ?>" title="Set the time for the reminder. Format: HH:MM. Example: 15:30 or 3:30pm" />
 			<br />
@@ -41,8 +41,8 @@ $action = $data['action'];
 		</p>
 		
 		<?php if( $action == 'update' ) : ?>
-			<input type="submit" value="Edit Reminder" class="button-primary" />
-			<a href="<?php echo admin_url('admin.php?page=pogidude-ereminder'); ?>" class="button-secondary">Cancel Editing</a>
+			<input type="submit" value="Edit Reminder" class="button-primary button" />
+			<a href="<?php echo admin_url('admin.php?page=pogidude-ereminder'); ?>" class="button-secondary button">Cancel Editing</a>
 		<?php else: ?>
 			<input type="submit" value="Add Reminder" class="button-primary" />
 		<?php endif; ?>
@@ -108,3 +108,4 @@ $action = $data['action'];
 	</div>
 	
 </div>
+
