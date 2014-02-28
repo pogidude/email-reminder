@@ -11,7 +11,7 @@ class PDER_Admin{
 	
 	function init(){
 		add_action('admin_menu', array( &$this, 'create_menu' ) );
-		add_action('init', array( &$this, 'process_submissions' ) );
+		add_action('admin_init', array( &$this, 'process_submissions' ) );
 	}
 
 	/** Add the admin menu page */
@@ -49,6 +49,7 @@ class PDER_Admin{
 		$data['action'] = isset( $_REQUEST['pder-action'] ) && $_REQUEST['pder-action'] == 'edit' ? 'update' : 'add';
 		
 		$file = 'ereminder-page.php';
+		//header('Content-type: text/html; charset=utf-8');
 		echo PDER_Utils::get_view( $file, $data );
 	}
 	
