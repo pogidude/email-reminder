@@ -3,8 +3,8 @@ Contributors: pogidude
 Donate link: http://pogidude.com/donate/
 Tags: email reminder, reminder
 Requires at least: 3.0
-Tested up to: 3.8.1
-Stable tag: 1.2
+Tested up to: 4.2.2
+Stable tag: 1.3
 
 Schedule email reminders. Enter your reminder, where you'd like to email the reminder to, and when you'd like the reminder to be sent.
 
@@ -49,6 +49,11 @@ Check in your spam folder. Sometimes, email messages are marked as spam by your 
 2. Screenshot of list of scheduled reminders
 
 == Changelog ==
+= 1.3 =
+*2015-05-16*
+* Make strings translateable
+* Add NL .mo file
+* Add .pot file
 
 = 1.2 =
 * UI updates
