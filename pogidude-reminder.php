@@ -36,6 +36,9 @@ require_once( trailingslashit( PDER_CLASSES ) . 'PDER_Base.php' );
 /* View Cron Events Page */
 //require_once( trailingslashit( PDER_INC_DIR ) . 'admin-cron-events.php' );
 
+/* Load language internationalizing */
+load_plugin_textdomain('email-reminder', false, basename( dirname( __FILE__ ) ) . '/languages' );
+
 /* activation/deactivation stuff */
 register_activation_hook( __FILE__, array('PDER_Base','on_activate' ) );
 register_deactivation_hook( __FILE__, array('PDER_Base','on_deactivate' ) );
