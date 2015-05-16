@@ -85,16 +85,16 @@ Class PDER_Base {
 	 */
 	public function register_post_type(){
 		$labels = array(
-			'name' => __('E-Reminders'),
-			'singular_name' => __('E-Reminder'),
-			'add_new' => _x('Create New', 'entry'),
-			'add_new_item' => __('Create E-Reminder' ),
-			'edit_item' => __( 'Edit E-Reminder' ),
-			'new_item' => __( 'New E-Reminder' ),
-			'view_item' => __( 'View E-Reminder' ),
-			'search_items' => __( 'Search E-Reminders' ),
-			'not_found' => __('No E-Reminders found' ),
-			'not_found_in_trash' => __('No E-Reminders found in Trash' ),
+			'name' => __('E-Reminders', 'email-reminder'),
+			'singular_name' => __('E-Reminder', 'email-reminder'),
+			'add_new' => _x('Create New', 'entry', 'email-reminder'),
+			'add_new_item' => __('Create E-Reminder', 'email-reminder' ),
+			'edit_item' => __( 'Edit E-Reminder', 'email-reminder' ),
+			'new_item' => __( 'New E-Reminder', 'email-reminder' ),
+			'view_item' => __( 'View E-Reminder', 'email-reminder' ),
+			'search_items' => __( 'Search E-Reminders', 'email-reminder' ),
+			'not_found' => __('No E-Reminders found', 'email-reminder' ),
+			'not_found_in_trash' => __('No E-Reminders found in Trash', 'email-reminder' ),
 			'parent_item_colon' => ''
 		);
 		
@@ -112,7 +112,7 @@ Class PDER_Base {
 			'hierarchical' => false,
 			'menu_position' => null,
 			'supports' => array(''),
-			'description' => 'Stores reminders'
+			'description' => __('Stores reminders', 'email-reminder')
 		);
 		
 		register_post_type( 'ereminder', $args );

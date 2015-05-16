@@ -1,0 +1,251 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Email Reminder 1.2\n"
+"POT-Creation-Date: 2013-09-10 08:47+0100\n"
+"PO-Revision-Date: 2013-09-10 08:48+0100\n"
+"Last-Translator: Bjorn van der Neut <bjornvdneut@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.7\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;_e;__\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-SearchPath-0: views\n"
+"X-Poedit-SearchPath-1: includes\\classes\n"
+
+#: views/ereminder-page.php:8
+msgid "Create Email Reminder"
+msgstr "Creeër email herinnering"
+
+#: views/ereminder-page.php:28
+msgid "Enter your reminder"
+msgstr "Voer je herinnering in"
+
+#: views/ereminder-page.php:29
+msgid "Send Dad a birthday card"
+msgstr "Verstuur papa een verjaardagskaart"
+
+#: views/ereminder-page.php:29
+msgid "Type your reminder here."
+msgstr "Voer je herinnering in."
+
+#: views/ereminder-page.php:32
+msgid "Email address to send reminder to"
+msgstr "Emailadres van de ontvanger"
+
+#: views/ereminder-page.php:33
+msgid "youremailaddress@email.com"
+msgstr "ontvangeremailadres@email.com"
+
+#: views/ereminder-page.php:33
+msgid ""
+"Where to email the reminder to. Leave this field blank to send email to "
+"yourself"
+msgstr ""
+"Waar de herinnering naar toe te sturen. Laat leeg om de mail naar je zelf te "
+"sturen"
+
+#: views/ereminder-page.php:36
+msgid "When to send reminder"
+msgstr "Wanneer verzenden"
+
+#: views/ereminder-page.php:37
+msgid "YYYY-MM-DD"
+msgstr "JJJJ-MM-DD"
+
+#: views/ereminder-page.php:37
+msgid "Set the date for the reminder (Format: YYYY-MM-DD)"
+msgstr "Stel de datum in van de herinnering (Formaat: JJJJ-MM-DD)"
+
+#: views/ereminder-page.php:38
+msgid "Set the time for the reminder. Format: HH:MM. Example: 15:30 or 3:30pm"
+msgstr ""
+"Stel de tijd van de herinnering in (Formaat: UU:MM. Voorbeeld: 15:30 of "
+"03:30)"
+
+#: views/ereminder-page.php:40
+msgid "Current Time:"
+msgstr "Huidige tijd:"
+
+#: views/ereminder-page.php:40
+msgid "as set in the"
+msgstr "als ingesteld in de "
+
+#: views/ereminder-page.php:40
+msgid "Timezone settings"
+msgstr "Tijdzone instellingen"
+
+#: views/ereminder-page.php:44
+msgid "Save Reminder"
+msgstr "Herinnering opslaan "
+
+#: views/ereminder-page.php:45
+msgid "Cancel Editing"
+msgstr "Annuleer bewerken"
+
+#: views/ereminder-page.php:47
+msgid "Add Reminder"
+msgstr "Herinnering toevoegen"
+
+#: views/ereminder-page.php:57
+msgid "Scheduled Reminders"
+msgstr "Geplande herinnering"
+
+#: views/ereminder-page.php:88
+msgid "Sent Reminders"
+msgstr "Verzonden herinneringen"
+
+#: views/ereminder-page.php:88
+msgid "Delete all sent reminders"
+msgstr "Verwijder alle verzonden herinneringen"
+
+#: views/ereminder-list.php:7
+msgid "Reschedule"
+msgstr "Herplannen"
+
+#: views/ereminder-list.php:11
+msgid "Edit"
+msgstr "Bewerk"
+
+#: views/ereminder-list.php:19 views/ereminder-list.php:28
+#: includes\classes/PDER_Admin.php:164 includes\classes/PDER_Admin.php:233
+#: includes\classes/PDER_Admin.php:267
+msgid "Reminder"
+msgstr "Herinnering"
+
+#: views/ereminder-list.php:20 views/ereminder-list.php:29
+msgid "Send Reminder on"
+msgstr "Verzend herinnering op"
+
+#: views/ereminder-list.php:21 views/ereminder-list.php:30
+msgid "Send To"
+msgstr "Verstuur naar"
+
+#: views/ereminder-list.php:22 views/ereminder-list.php:31
+msgid "Action"
+msgstr "Acties"
+
+#: views/ereminder-list.php:27
+msgid "ID"
+msgstr "Id"
+
+#: views/ereminder-list.php:36
+msgid "No reminders found."
+msgstr "Geen herinnering gevonden."
+
+#: views/ereminder-list.php:61
+msgid "Delete"
+msgstr "Verwijder"
+
+#: includes\classes/PDER_Base.php:88
+msgid "E-Reminders"
+msgstr "Herinneringen"
+
+#: includes\classes/PDER_Base.php:89
+msgid "E-Reminder"
+msgstr "Herinnering"
+
+#: includes\classes/PDER_Base.php:91
+msgid "Create E-Reminder"
+msgstr "Creeër herinnering"
+
+#: includes\classes/PDER_Base.php:92
+msgid "Edit E-Reminder"
+msgstr "Bewerk herinnering"
+
+#: includes\classes/PDER_Base.php:93
+msgid "New E-Reminder"
+msgstr "Nieuwe herinnering"
+
+#: includes\classes/PDER_Base.php:94
+msgid "View E-Reminder"
+msgstr "Toon herinnering"
+
+#: includes\classes/PDER_Base.php:95
+msgid "Search E-Reminders"
+msgstr "Zoek herinnering"
+
+#: includes\classes/PDER_Base.php:96
+msgid "No E-Reminders found"
+msgstr "Geen herinneringen gevonden"
+
+#: includes\classes/PDER_Base.php:97
+msgid "No E-Reminders found in Trash"
+msgstr "Geen herinnering in de prullenbak gevonden"
+
+#: includes\classes/PDER_Admin.php:95
+msgid "Please enter a reminder."
+msgstr "Voer een herinnering in a.u.b."
+
+#: includes\classes/PDER_Admin.php:109
+msgid "Please enter a valid e-mail address."
+msgstr "Voer een geldig emailadres in a.u.b."
+
+#: includes\classes/PDER_Admin.php:122
+msgid "Please enter date in the correct format (YYYY-MM-DD)."
+msgstr "Voer een geldige datum in a.u.b. (Formaat: JJJJ-MM-DD)"
+
+#: includes\classes/PDER_Admin.php:125
+msgid "Please enter time in the correct format (HH:MM:S)."
+msgstr "voer een geldige tijd in a.u.b. (Formaat: UU:MM:SS)"
+
+#: includes\classes/PDER_Admin.php:159
+msgid "There was an error scheduling your reminder."
+msgstr "Er ging iets fout tijdens het schedule van de herinnering."
+
+#: includes\classes/PDER_Admin.php:162
+msgid "Updated reminder"
+msgstr "Wijzig herinnering"
+
+#: includes\classes/PDER_Admin.php:162 includes\classes/PDER_Admin.php:164
+msgid "scheduled for"
+msgstr "gepland voor"
+
+#: includes\classes/PDER_Admin.php:164
+#, fuzzy
+msgid "added."
+msgstr "toegevoegd."
+
+#: includes\classes/PDER_Admin.php:197
+#, fuzzy
+msgid "Editing Reminder"
+msgstr "Bewerk herinnering"
+
+#: includes\classes/PDER_Admin.php:225
+msgid "Error: Invalid ID:"
+msgstr "Fout: Ongeldig Id:"
+
+#: includes\classes/PDER_Admin.php:230
+msgid "Error: Failure deleting reminder"
+msgstr "Fout: Verwijderen van herinnering mislukt"
+
+#: includes\classes/PDER_Admin.php:230
+msgid "Please try again."
+msgstr "Probeer het nogmaals a.u.b."
+
+#: includes\classes/PDER_Admin.php:233 includes\classes/PDER_Admin.php:267
+msgid "deleted."
+msgstr "verwijderd."
+
+#: includes\classes/PDER_Admin.php:269
+msgid "Error deleting reminder"
+msgstr "Fout: Verwijderen van herinnering mislukt"
+
+#: includes\classes/PDER.php:44
+msgid ""
+"This reminder was sent using <a href=\"http://pogidude.com/email-reminder/"
+"\">Email Reminder plugin</a> by <a href=\"http://pogidude.com/about/"
+"\">Pogidude Web Studio</a>"
+msgstr ""
+"Deze herinnering is verzonden met de <a href=\"http://pogidude.com/email-"
+"reminder/\">Email Reminder plugin</a> gemaakt door <a href=\"http://pogidude."
+"com/about/\">Pogidude Web Studio</a>"
+
+#: includes\classes/PDER.php:52
+msgid "[Reminder] "
+msgstr "Herinnering"
+
+#: includes\classes/PDER.php:63
+msgid "<p><strong>REMINDER:</strong><br />\n"
+msgstr "<p><strong>Herinnering:</strong><br />\n"

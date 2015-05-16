@@ -4,11 +4,11 @@ $ereminder_array = $data['list'];
 $type = $data['type'];
 switch( $type ){
 	case 'sent':
-		$edit_text = 'Reschedule';
+		$edit_text = __( 'Reschedule', 'email-reminder' );
 		break;
 	case 'schedule':
 	default:
-		$edit_text = 'Edit';
+		$edit_text = __( 'Edit', 'email-reminder' );
 		break;
 }
 ?>
@@ -16,24 +16,24 @@ switch( $type ){
 	<thead>
 		<tr>
 			<th class="id">ID</th>
-			<th class="content">Reminder</th>
-			<th class="date">Send Reminder on</th>
-			<th class="email">Send To</th>
-			<th class="action">Action</th>
+			<th class="content"><?php _e( 'Reminder', 'email-reminder' ); ?></th>
+			<th class="date"><?php _e( 'Send Reminder on', 'email-reminder' ); ?></th>
+			<th class="email"><?php _e( 'Send To', 'email-reminder' ); ?></th>
+			<th class="action"><?php _e( 'Action', 'email-reminder' ); ?></th>
 		</tr>
 	</thead>
 	<tfoot>
 		<tr>
-			<th class="id">ID</th>
-			<th class="content">Reminder</th>
-			<th class="date">Send Reminder on</th>
-			<th class="email">Send To</th>
-			<th class="action">Action</th>
+			<th class="id"><?php _e( 'ID', 'email-reminder' ); ?></th>
+			<th class="content"><?php _e( 'Reminder', 'email-reminder' ); ?></th>
+			<th class="date"><?php _e( 'Send Reminder on', 'email-reminder' ); ?></th>
+			<th class="email"><?php _e( 'Send To', 'email-reminder' ); ?></th>
+			<th class="action"><?php _e( 'Action', 'email-reminder' ); ?></th>
 		</tr>
 	</tfoot>
 	<tbody>
 		<?php if( empty( $ereminder_array ) ) : ?>
-			<tr><td colspan="5">No reminders found.</td></t>
+			<tr><td colspan="5"><?php _e( 'No reminders found.', 'email-reminder' ); ?></td></t>
 		<?php else : ?>
 			<?php foreach( $ereminder_array as $ereminder ): ?>
 				<tr data-id="<?php echo $ereminder->ID; ?>">
@@ -58,7 +58,7 @@ switch( $type ){
 						'postid' => $ereminder->ID
 					), admin_url('admin.php') );
 					?>
-					<td class="action"><a class="pder-edit-link" href="<?php echo esc_url( $edit_link ); ?>"><?php echo $edit_text; ?></a> | <a class="pder-delete-link" href="<?php echo esc_url( $delete_link ); ?>">Delete</a></td>
+					<td class="action"><a class="pder-edit-link" href="<?php echo esc_url( $edit_link ); ?>"><?php echo $edit_text; ?></a> | <a class="pder-delete-link" href="<?php echo esc_url( $delete_link ); ?>"><?php _e( 'Delete', 'email-reminder' ); ?></a></td>
 				</tr>
 			<?php endforeach; ?>
 		<?php endif; ?>
