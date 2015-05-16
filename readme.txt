@@ -16,6 +16,11 @@ That's it.
 
 [Email Reminder Plugin Page](http://pogidude.com/email-reminder/)
 
+= Translating and Contributing =
+Interested in translating this plugin to your language? Grab the [development version](http://downloads.wordpress.org/plugin/email-reminder.zip) where you will find an up to date email-reminder.pot inside the *languages* directory. Send any translation files to ryann @ pogidude.com and thank you!
+
+A [GIT repository](https://github.com/pogidude/email-reminder) is also available if you'd like to submit a patch.
+
 If you enjoyed using Email Reminder and find it useful, please consider [__making a donation__](http://pogidude.com/donate/). Your donation will help encourage and support the plugin's continued development and better user support.
 
 == Installation ==
