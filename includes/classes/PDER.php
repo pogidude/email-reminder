@@ -41,7 +41,8 @@ class PDER{
 	public static function send_ereminders(){
 		
 		//credits
-		$credits = 'This reminder was sent using <a href="http://pogidude.com/email-reminder/">Email Reminder plugin</a> by <a href="http://pogidude.com/about/">Pogidude Web Studio</a>';
+		$credits = sprintf(__('This reminder was sent using <a href="%s">Email Reminder plugin</a> by <a href="%s">Pogidude
+Web Studio</a>', 'email-reminder'), 'http://pogidude.com/email-reminder/', 'http://pogidude.com/about/');
 		
 		//get ereminders
 		$pd = new PDER;
@@ -49,18 +50,21 @@ class PDER{
 		
 		foreach( $ereminders as $ereminder ){
 		
-			$subject = '[Reminder] ' . $ereminder->post_title;
+			$subject = __('[Reminder] ', 'email-reminder') . $ereminder->post_title;
 			$to = $ereminder->post_excerpt;
 			
 			//use the email of the user who scheduled the reminder
 			$author = get_userdata( $ereminder->post_author );
 			$author_email = $author->user_email;
-			$headers = 	"From: Email Reminder <{$author_email}>\r\n" .
-						"Content-Type: text/html;\r\n";
+
+			$headers = 	__('From: Email Reminder', 'email-reminder') . "<{$author_email}>\r\n" . "Content-Type:
+			text/html;\r\n";
 			
 			$creation_date = date( 'l, F j, Y', strtotime( $ereminder->post_date ) );
-			$message = "<p>This message is a reminder created on {$creation_date}</p>\n";
-			$message .= "<p><strong>REMINDER:</strong><br />\n";
+			$message = "<p>" . sprintf(__('This message is a reminder created on %s', 'email-reminder'),
+					$creation_date) .
+			           "</p>\n";
+			$message .= '<p><strong>' . __('REMINDER:', 'email-reminder') . "</strong><br />\n";
 			$message .= $ereminder->post_content . "</p><br />\n";
 			$message .= "<p>{$credits}</p>";
 			

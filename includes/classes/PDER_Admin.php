@@ -17,9 +17,11 @@ class PDER_Admin{
 	/** Add the admin menu page */
 	function create_menu(){
 		$hooks = array();
-		$hooks[] = add_dashboard_page( 'Create Email Reminder', 'Email Reminder', 'manage_options', 'pogidude-ereminder', array( &$this, 'ereminder_page' ) );
+		$page_title = __('Create Email Reminder', 'email-reminder');
+		$menu_title = __('Email Reminder', 'email-reminder');
+		$hooks[] = add_dashboard_page( $page_title, $menu_title, 'manage_options', 'pogidude-ereminder', array( &$this, 'ereminder_page' ) );
 		
-		$hooks[] = add_menu_page('Create Email Reminder', 'Email Reminder', 'manage_options', 'pogidude-ereminder', array( &$this, 'ereminder_page' ), PDER_ASSETS . '/images/icon.png' );
+		$hooks[] = add_menu_page($page_title, $menu_title, 'manage_options', 'pogidude-ereminder', array( &$this, 'ereminder_page' ), PDER_ASSETS . '/images/icon.png' );
 		
 		foreach( $hooks as $hook ){
 			add_action( 'admin_print_scripts-' . $hook, array( &$this, 'load_assets' ) );
@@ -93,7 +95,7 @@ class PDER_Admin{
 		/** Validate/Sanitize **/
 		//Reminder
 		if( '' === $pder['reminder'] ){
-			$error['reminder'] = 'Please enter a reminder.';
+			$error['reminder'] = __('Please enter a reminder.', 'email-reminder');
 			$clean['reminder'] = '';
 		} else {
 			$clean['reminder'] = $pder['reminder'];
@@ -107,7 +109,7 @@ class PDER_Admin{
 		
 		//Email
 		if( '' === $pder['email'] || !is_email( $pder['email'] ) ){
-			$error['email'] = 'Please enter a valid e-mail address.';
+			$error['email'] = __('Please enter a valid e-mail address.', 'email-reminder');
 			$clean['email'] = '';
 		} else {
 			$clean['email'] = $pder['email'];
@@ -120,10 +122,10 @@ class PDER_Admin{
 		
 		//validate dates and specify default ones if needed
 		if( '' === $pder['date'] ){
-			$error['date'] = 'Please enter date in the correct format (YYYY-MM-DD).';
+			$error['date'] = __('Please enter date in the correct format (YYYY-MM-DD).', 'email-reminder');
 		}
 		if( '' === $pder['time'] ){
-			$error['time'] = 'Please enter time in the correct format (HH:MM:S).';
+			$error['time'] = __('Please enter time in the correct format (HH:MM:S).', 'email-reminder');
 		}
 		$date_unformatted = empty( $pder['date'] )? $timenow : strtotime( $pder['date'] );
 		$time_unformatted = empty( $pder['time'] ) ? $timenow + 60*60 : strtotime( $pder['time'] );
@@ -157,12 +159,20 @@ class PDER_Admin{
 			
 			/** In theory, $insert_post_id can be 0, but very unlikely on a WP site **/
 			if( empty( $insert_post_id ) ){
-				$this->_messages['error'][] = 'There was an error scheduling your reminder.';
+
+				$this->_messages['error'][] = __('There was an error scheduling your reminder.', 'email-reminder');
+
 			} else {
+
+				$date_sched = date( 'F j, Y h:i A', strtotime( $date_all ) );
+
 				if( $data['pder-action'] == 'update' ){
-					$this->_messages['success'][] = 'Updated reminder <strong>#' . $insert_post_id . '</strong> scheduled for ' . date( 'F j, Y h:i A', strtotime( $date_all ) ) . '.';
+
+					$this->_messages['success'][] = sprintf(__('Updated reminder <strong>#%d</strong> scheduled for %s.', 'email-reminder'), $insert_post_id, $date_sched);
+
 				} else {
-					$this->_messages['success'][] = 'Reminder <strong>#' . $insert_post_id . '</strong> scheduled for ' . date( 'F j, Y h:i A', strtotime( $date_all ) ) . ' added.';
+					$this->_messages['success'][] = sprintf(__('Reminder <strong>#%d</strong> scheduled for %s added.', 'email-reminder'), $insert_post_id, $date_sched);
+
 				}
 				
 				//set to defaults
@@ -195,7 +205,7 @@ class PDER_Admin{
 			'id' => $post->ID
 		);
 		
-		$message = 'Editing Reminder <strong>#' . $post->ID.'</strong>';
+		$message = sprintf(__('Editing Reminder <strong>#%s</strong>', 'email-reminder'), $post->ID);
 		
 		if( isset( $data['ajax'] ) && $data['ajax'] == 'true' ){
 			$return = array(
@@ -223,15 +233,15 @@ class PDER_Admin{
 		$success = array();
 		
 		if( empty( $post ) ){
-			$error[] = 'Error: Invalid ID: <strong>#'. $post_id . '</strong>.';
+			$error[] = sprintf(__('Error: Invalid ID: <strong>#%d</strong>.', 'email-reminder'), $post_id);
 		} else {
 			$result = wp_delete_post( $post_id, true ); //bypass trash and force deletion
 			if( !$result ){
 				//failure
-				$error[] = 'Error: Failure deleting reminder <strong>#'. $post_id . '</strong>. Please try again.';
+				$error[] = sprintf(__('Error: Failure deleting reminder <strong>#%d</strong>. Please try again.', 'email-reminder'), $post_id);
 			} else {
 				//successful
-				$success[] = 'Reminder <strong>#' . $post_id . '</strong> deleted.';
+				$success[] = sprintf(__('Reminder <strong>#%s</strong> deleted.', 'email-reminder'), $post_id);
 			}
 		}
 		
@@ -265,9 +275,9 @@ class PDER_Admin{
 		} else {
 			foreach( $ereminders as $ereminder ){
 				if( wp_delete_post( $ereminder->ID ) ){
-					$success[] = 'Reminder <strong>#' . $ereminder->ID . '</strong> deleted.';
+					$success[] = sprintf(__('Reminder <strong>#%d</strong> deleted.', 'email-reminder'), $ereminder->ID);
 				} else {
-					$error[] = 'Error deleting reminder <strong>#'. $ereminder->ID . '</strong>.';
+					$error[] = sprintf(__('Error deleting reminder <strong>#%d</strong>.', 'email-reminder'), $ereminder->ID);
 				}
 			}
 		}
