@@ -5,7 +5,7 @@ $action = $data['action'];
 ?>
 <div class="wrap ereminder">
 	<?php screen_icon('edit-comments'); ?>
-	<h2 class="page-title">Create Email Reminder</h2>
+	<h2 class="page-title"><?php _e( 'Create Email Reminder', 'email-reminder' ); ?></h2>
 	
 	<?php if( !empty( $messages ) ) : ?>
 		<?php if( !empty( $messages['error'] ) ): ?>
@@ -25,26 +25,26 @@ $action = $data['action'];
 	
 	<form method="POST" action="">
 		<p class="field">
-			<label for="pd-reminder-content">Enter your reminder</label>
-			<input type="text" size="40" name="pder[reminder]" id="pd-reminder-content" placeholder="Send Dad a birthday card" value="<?php echo $fields['reminder']; ?>" title="Type your reminder here." />
+			<label for="pd-reminder-content"><?php _e( 'Enter your reminder', 'email-reminder' ); ?></label>
+			<input type="text" size="40" name="pder[reminder]" id="pd-reminder-content" placeholder="<?php _e( 'Send Dad a birthday card', 'email-reminder' ); ?>" value="<?php echo $fields['reminder']; ?>" title="<?php _e( 'Type your reminder here.', 'email-reminder' ); ?>" />
 		</p>
 		<p class="field">
-			<label for="pd-reminder-email" title="Leave this field blank to send email to yourself">Email address to send reminder to</label>
-			<input type="email" size="40" name="pder[email]" id="pd-reminder-email" placeholder="youemailaddress@email.com" title="Where to email the reminder to. Leave this field blank to send email to yourself" value="<?php echo $fields['email']; ?>" />
+			<label for="pd-reminder-email" title="<?php _e( 'Leave this field blank to send email to yourself', 'email-reminder' ); ?>"><?php _e( 'Email address to send reminder to', 'email-reminder' ); ?></label>
+			<input type="email" size="40" name="pder[email]" id="pd-reminder-email" placeholder="<?php _e( 'youemailaddress@email.com', 'email-reminder' ); ?>" title="<?php _e( 'Where to email the reminder to. Leave this field blank to send email to yourself', 'email-reminder' ); ?>" value="<?php echo $fields['email']; ?>" />
 		</p>
 		<p class="field">
-			<label for="pd-reminder-date">When to send reminder</label>
-			<input type="text" size="20" name="pder[date]" id="pd-reminder-date" value="<?php echo $fields['date']; ?>" placeholder="YYYY-MM-DD" title="Set the date for the reminder (Format: YYYY-MM-DD)" />
-			<input type="text" size="15" name="pder[time]" id="pd-reminder-time" value="<?php echo $fields['time']; ?>" placeholder="<?php echo date( 'H:00', strtotime( current_time('mysql',0) ) ); ?>" title="Set the time for the reminder. Format: HH:MM. Example: 15:30 or 3:30pm" />
+			<label for="pd-reminder-date"><?php _e( 'When to send reminder', 'email-reminder' ); ?></label>
+			<input type="text" size="20" name="pder[date]" id="pd-reminder-date" value="<?php echo $fields['date']; ?>" placeholder="YYYY-MM-DD" title="<?php _e( 'Set the date for the reminder (Format: YYYY-MM-DD)', 'email-reminder' ); ?>" />
+			<input type="text" size="15" name="pder[time]" id="pd-reminder-time" value="<?php echo $fields['time']; ?>" placeholder="<?php echo date( 'H:00', strtotime( current_time('mysql',0) ) ); ?>" title="<?php _e( 'Set the time for the reminder. Format: HH:MM. Example: 15:30 or 3:30pm', 'email-reminder' ); ?>" />
 			<br />
-			<span class="regular server-time description"><strong>Current Time:</strong> <code><?php echo  date( 'F j, Y h:i A', strtotime( current_time('mysql') ) ); ?></code> as set in the <a href="<?php echo admin_url('options-general.php'); ?>">Timezone settings</a></span>
+			<span class="regular server-time description"><strong><?php _e( 'Current Time:', 'email-reminder' ); ?></strong> <code><?php echo  date( 'F j, Y h:i A', strtotime( current_time('mysql') ) ); ?></code> <?php _e( 'as set in the', 'email-reminder' ); ?> <a href="<?php echo admin_url('options-general.php'); ?>"><?php _e( 'Timezone settings', 'email-reminder' ); ?></a></span>
 		</p>
 		
 		<?php if( $action == 'update' ) : ?>
-			<input type="submit" value="Edit Reminder" class="button-primary button" />
-			<a href="<?php echo admin_url('admin.php?page=pogidude-ereminder'); ?>" class="button-secondary button">Cancel Editing</a>
+			<input type="submit" value="<?php _e( 'Edit Reminder', 'email-reminder' ); ?>" class="button-primary button" />
+			<a href="<?php echo admin_url('admin.php?page=pogidude-ereminder'); ?>" class="button-secondary button"><?php _e( 'Cancel Editing', 'email-reminder' ); ?></a>
 		<?php else: ?>
-			<input type="submit" value="Add Reminder" class="button-primary" />
+			<input type="submit" value="<?php _e( 'Add Reminder', 'email-reminder' ); ?>" class="button-primary" />
 		<?php endif; ?>
 		
 		<input type="hidden" name="pder-action" value="<?php echo $action; ?>" />
@@ -54,7 +54,7 @@ $action = $data['action'];
 	</form>
 	
 	<div class="reminder-list pder-scheduled">
-		<h3>Scheduled Reminders</h3>
+		<h3><?php _e( 'Scheduled Reminders', 'email-reminder' ); ?></h3>
 		<?php
 			global $wpdb;
 			
@@ -85,7 +85,7 @@ $action = $data['action'];
 			'pder-delete-all-sent-nonce' => wp_create_nonce( 'pder-delete-all-sent' ),
 		), admin_url('admin.php') );
 		?>
-		<h3>Sent Reminders <a href="<?php echo esc_url( $delete_all_link ); ?>" class="button-secondary">Delete all sent reminders</a></h3>
+		<h3>Sent Reminders <a href="<?php echo esc_url( $delete_all_link ); ?>" class="button-secondary"><?php _e( 'Delete all sent reminders', 'email-reminder' ); ?></a></h3>
 		<?php
 			global $wpdb;
 			
@@ -106,6 +106,4 @@ $action = $data['action'];
 			echo PDER_Utils::get_view( 'ereminder-list.php', $scheduled_data );
 		?>
 	</div>
-	
 </div>
-
